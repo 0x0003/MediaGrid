@@ -46,6 +46,18 @@ fileInput.addEventListener('change', (e) => {
   updatePrompt();
 });
 
+ignoreSubdirsCheckbox.addEventListener('change', () => {
+  for (const d of pendingDirectories) {
+    if (d.loaded) {
+      const removeSet = new Set(d.files);
+      allFiles = allFiles.filter(f => !removeSet.has(f));
+      baseOrder = baseOrder.filter(f => !removeSet.has(f));
+      d.loaded = false;
+    }
+  }
+  updateDirList();
+});
+
 loadBtn.addEventListener('click', () => {
   const toRemove = pendingDirectories.filter(d => d._pendingRemove);
   const toAdd = pendingDirectories.filter(d => !d.loaded);
