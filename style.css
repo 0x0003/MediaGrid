@@ -297,13 +297,8 @@ select:hover {
   background: transparent;
   /*
    * HACK: Chromium single-video compositor workaround.
-   * A CSS filter — even `brightness(1)`, the identity function — forces
-   * Chromium to create a render surface for this element. Without it,
-   * Chromium's direct video overlay path bypasses the item's compositor
-   * layer, causing lag when a translate3d scroll transform is active
-   * with exactly one video. A render surface prevents the overlay
-   * bypass.
-   * Probably extremely niche and setup-related.
+   * https://crbug.com/40677119
+   * https://crbug.com/40677119#comment54
    */
   filter: brightness(1);
 }
