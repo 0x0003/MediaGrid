@@ -4,9 +4,9 @@ fileButton.addEventListener('click', () => fileInput.click());
 /* Theme */
 {
   let isLight;
-  if (typeof CONFIG !== 'undefined' && CONFIG.theme === 'light') {
+  if (CONFIG.theme === 'light') {
     isLight = true;
-  } else if (typeof CONFIG !== 'undefined' && CONFIG.theme === 'dark') {
+  } else if (CONFIG.theme === 'dark') {
     isLight = false;
   } else {
     isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
@@ -55,7 +55,7 @@ function toggleLoadPanel(show) {
 }
 loadPanelToggle.addEventListener('click', () => toggleLoadPanel());
 document.getElementById('loadPanelClose').addEventListener('click', () => toggleLoadPanel(false));
-toggleLoadPanel(typeof CONFIG !== 'undefined' && CONFIG.loadPanelVisible != null ? CONFIG.loadPanelVisible : true);
+toggleLoadPanel(CONFIG.loadPanelVisible ?? true);
 
 /* Columns / Filter / Reshuffle */
 columnsSelect.addEventListener('change', () => {
@@ -76,7 +76,6 @@ reshuffleBtn.addEventListener('click', () => {
   if (shuffleToggle.checked) shuffle(allFiles);
   else if (baseOrder.length) { allFiles.length = 0; allFiles.push(...baseOrder); }
   applyFilterAndRebuild();
-  targetY = curY = 0;
 });
 
 /* Auto-scroll */
@@ -285,14 +284,12 @@ function enterZoom(it) {
 
   let clone;
   function zoomURL(it) {
-    if (it._url) return it._url;
     return it.objectURL || URL.createObjectURL(it.file);
   }
   if (it.file.type.startsWith('image/')) {
     clone = document.createElement('img');
     const url = zoomURL(it);
     clone.src = url;
-    clone.dataset._createdObjectUrl = (!it.objectURL && !it._url) ? '1' : '0';
   } else if (it.file.type.startsWith('video/')) {
     clone = document.createElement('video');
     const url = zoomURL(it);
@@ -302,7 +299,6 @@ function enterZoom(it) {
     clone.loop = true;
     clone.muted = false;
     clone.controls = true;
-    clone.dataset._createdObjectUrl = (!it.objectURL && !it._url) ? '1' : '0';
     clone.currentTime = originalEl.currentTime || 0;
   } else {
     zoomOverlay.style.display = 'none'; resumeAllGridVideos(); return;
@@ -338,9 +334,6 @@ function enterZoom(it) {
     zoomOverlay.style.display = 'none';
     zoomedMedia = null;
     resumeAllGridVideos();
-    if (clone.dataset._createdObjectUrl === '1') {
-      try { URL.revokeObjectURL(clone.src); } catch (e) { }
-    }
     try { viewport.focus({ preventScroll: true }); } catch (e) { }
     _zoomExitHandler = null;
   }
@@ -552,7 +545,7 @@ window.addEventListener('resize', () => {
       let t = 0;
       for (const it of col.items) {
         if (!it.el) {
-          it.height = Math.round((it.file._estRatio || EST_RATIO) * columnWidth);
+          it.height = Math.round(EST_RATIO * columnWidth);
         } else {
           it.height = it.el.getBoundingClientRect().height;
           resizePixelCanvas(it);
@@ -571,7 +564,6 @@ window.addEventListener('resize', () => {
 (function init() {
   createColumns(numColumns);
   assignBatch(ASSIGN_BATCH);
-  recomputeTotals();
   raf = requestAnimationFrame(frame);
   updatePrompt();
 })();

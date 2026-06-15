@@ -1,9 +1,9 @@
 /* constants */
-const ASSIGN_BATCH = (typeof CONFIG !== 'undefined' && CONFIG.assignBatch != null) ? CONFIG.assignBatch : 48;
-const PRELOAD_SCREENS = (typeof CONFIG !== 'undefined' && CONFIG.preloadScreens != null) ? CONFIG.preloadScreens : 4;
-const EST_RATIO = (typeof CONFIG !== 'undefined' && CONFIG.estRatio != null) ? CONFIG.estRatio : 0.75;
-const OBS_THRESHOLD = (typeof CONFIG !== 'undefined' && CONFIG.obsThreshold != null) ? CONFIG.obsThreshold : 0.45;
-const EASE = (typeof CONFIG !== 'undefined' && CONFIG.ease != null) ? CONFIG.ease : 0.12;
+const ASSIGN_BATCH = CONFIG.assignBatch ?? 48;
+const PRELOAD_SCREENS = CONFIG.preloadScreens ?? 4;
+const EST_RATIO = CONFIG.estRatio ?? 0.75;
+const OBS_THRESHOLD = CONFIG.obsThreshold ?? 0.45;
+const EASE = CONFIG.ease ?? 0.12;
 
 /* grid state */
 let allFiles = [];
@@ -28,7 +28,7 @@ const playObserver = new IntersectionObserver(entries => {
     const v = e.target;
     if (e.intersectionRatio >= OBS_THRESHOLD) {
       v.play().catch(async () => {
-        try { v.muted = true; await v.play(); v.muted = false; } catch (e) { }
+        try { v.muted = true; await v.play(); v.muted = false; } catch (_) { }
       });
     } else {
       v.pause();
@@ -116,7 +116,6 @@ function assignBatch(count = ASSIGN_BATCH) {
       height: estH,
       el: null,
       objectURL: null,
-      _url: file._url,
     };
     columns[j].items.push(it);
     columns[j].height += it.height;
@@ -139,7 +138,7 @@ function adjustColumnAfter(colIndex, itemIndexInCol, delta) {
 
 /* mount media */
 function mountMediaInto(wrap, it, idxInCol) {
-  const url = it._url || createObjectURLFor(it);
+  const url = createObjectURLFor(it);
   if (it.file.type.startsWith('image/')) {
     const img = document.createElement('img');
     img.className = 'media';

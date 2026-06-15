@@ -90,7 +90,6 @@ loadBtn.addEventListener('click', () => {
       const depth = rel.split('/').filter(Boolean).length;
       if (ignoreSubdirs && depth > 2) continue;
       if (re && !re.test(f.name)) continue;
-      f._estRatio = EST_RATIO;
       allFiles.push(f);
       baseOrder.push(f);
     }
@@ -103,7 +102,6 @@ loadBtn.addEventListener('click', () => {
   if (shuffleToggle && shuffleToggle.checked) shuffle(allFiles);
   applyFilterAndRebuild();
   updatePrompt();
-  if (raf === null) raf = requestAnimationFrame(frame);
 });
 
 regexInput.addEventListener('keydown', (e) => {
