@@ -21,3 +21,19 @@ const loadBtn = document.getElementById('loadBtn');
 const shuffleToggle = document.getElementById('shuffleToggle');
 const loadPanel = document.getElementById('loadPanel');
 const loadPanelToggle = document.getElementById('loadPanelToggle');
+
+/* Apply config to DOM elements */
+if (typeof CONFIG !== 'undefined') {
+  if (CONFIG.columns != null) columnsSelect.value = String(CONFIG.columns);
+  if (CONFIG.filter != null) filterSelect.value = CONFIG.filter;
+  if (CONFIG.shuffle != null) shuffleToggle.checked = CONFIG.shuffle;
+  if (CONFIG.speed != null) speedInput.value = CONFIG.speed;
+  if (CONFIG.speedMin != null) speedInput.min = CONFIG.speedMin;
+  if (CONFIG.speedMax != null) speedInput.max = CONFIG.speedMax;
+  if (CONFIG.volume != null) volumeInput.value = CONFIG.volume;
+  if (CONFIG.volumeMin != null) volumeInput.min = CONFIG.volumeMin;
+  if (CONFIG.volumeMax != null) volumeInput.max = CONFIG.volumeMax;
+  if (CONFIG.volumeStep != null) volumeInput.step = CONFIG.volumeStep;
+  if (CONFIG.ignoreSubdirs != null) ignoreSubdirsCheckbox.checked = CONFIG.ignoreSubdirs;
+  if (CONFIG.regexFilter != null) regexInput.value = CONFIG.regexFilter;
+}

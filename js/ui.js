@@ -3,7 +3,14 @@ fileButton.addEventListener('click', () => fileInput.click());
 
 /* Theme */
 {
-  const isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  let isLight;
+  if (typeof CONFIG !== 'undefined' && CONFIG.theme === 'light') {
+    isLight = true;
+  } else if (typeof CONFIG !== 'undefined' && CONFIG.theme === 'dark') {
+    isLight = false;
+  } else {
+    isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  }
   document.documentElement.classList.toggle('light', isLight);
   if (themeToggle) themeToggle.textContent = isLight ? '\u2600' : '\u263E';
 }
@@ -48,7 +55,7 @@ function toggleLoadPanel(show) {
 }
 loadPanelToggle.addEventListener('click', () => toggleLoadPanel());
 document.getElementById('loadPanelClose').addEventListener('click', () => toggleLoadPanel(false));
-toggleLoadPanel(true);
+toggleLoadPanel(typeof CONFIG !== 'undefined' && CONFIG.loadPanelVisible != null ? CONFIG.loadPanelVisible : true);
 
 /* Columns / Filter / Reshuffle */
 columnsSelect.addEventListener('change', () => {

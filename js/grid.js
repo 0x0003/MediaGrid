@@ -1,9 +1,9 @@
 /* constants */
-const ASSIGN_BATCH = 48;
-const PRELOAD_SCREENS = 4;
-const EST_RATIO = 0.75;
-const OBS_THRESHOLD = 0.45;
-const EASE = 0.12;
+const ASSIGN_BATCH = (typeof CONFIG !== 'undefined' && CONFIG.assignBatch != null) ? CONFIG.assignBatch : 48;
+const PRELOAD_SCREENS = (typeof CONFIG !== 'undefined' && CONFIG.preloadScreens != null) ? CONFIG.preloadScreens : 4;
+const EST_RATIO = (typeof CONFIG !== 'undefined' && CONFIG.estRatio != null) ? CONFIG.estRatio : 0.75;
+const OBS_THRESHOLD = (typeof CONFIG !== 'undefined' && CONFIG.obsThreshold != null) ? CONFIG.obsThreshold : 0.45;
+const EASE = (typeof CONFIG !== 'undefined' && CONFIG.ease != null) ? CONFIG.ease : 0.12;
 
 /* grid state */
 let allFiles = [];
