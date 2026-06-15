@@ -21,6 +21,7 @@ const loadBtn = document.getElementById('loadBtn');
 const shuffleToggle = document.getElementById('shuffleToggle');
 const loadPanel = document.getElementById('loadPanel');
 const loadPanelToggle = document.getElementById('loadPanelToggle');
+const dropOverlay = document.getElementById('dropOverlay');
 
 /* Apply config to DOM elements */
 if (CONFIG.columns != null) columnsSelect.value = String(CONFIG.columns);

@@ -127,7 +127,6 @@ function updateMediaStatus() {
 }
 
 /* drag and drop zone */
-const dropOverlay = document.getElementById('dropOverlay');
 
 function traverseEntry(entry, path) {
   return new Promise(resolve => {
