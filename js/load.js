@@ -18,7 +18,7 @@ function updateDirList() {
   dirList.replaceChildren();
   pendingDirectories.forEach((d, i) => {
     const el = document.createElement('div');
-    el.textContent = `${i + 1}. ${d.name}`;
+    el.textContent = `${i + 1}. ${d.name}/`;
     if (d.loaded && d._pendingRemove) {
       el.classList.add('pending-remove');
       el.addEventListener('click', () => { delete d._pendingRemove; updateDirList(); });
