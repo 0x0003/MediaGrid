@@ -338,3 +338,10 @@ function shuffle(a) {
     [a[i], a[j]] = [a[j], a[i]];
   }
 }
+
+function reshuffleFiles() {
+  if (allFiles.length === 0) return;
+  if (shuffleToggle.checked) shuffle(allFiles);
+  else if (baseOrder.length) { allFiles.length = 0; allFiles.push(...baseOrder); }
+  applyFilterAndRebuild();
+}

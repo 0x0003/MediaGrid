@@ -71,12 +71,7 @@ columnsSelect.addEventListener('change', () => {
   targetY = curY = prevCurY;
 });
 filterSelect.addEventListener('change', () => applyFilterAndRebuild());
-reshuffleBtn.addEventListener('click', () => {
-  if (allFiles.length === 0) return;
-  if (shuffleToggle.checked) shuffle(allFiles);
-  else if (baseOrder.length) { allFiles.length = 0; allFiles.push(...baseOrder); }
-  applyFilterAndRebuild();
-});
+reshuffleBtn.addEventListener('click', reshuffleFiles);
 
 /* Auto-scroll */
 toggleAutoBtn.addEventListener('click', () => {

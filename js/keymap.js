@@ -129,7 +129,7 @@ onHotkey('ArrowDown', 'Decrease volume',
 
 onHotkey('Enter / r', 'Reshuffle files',
   e => e.key.toLowerCase() === 'r' || e.key === 'Enter',
-  e => { if (allFiles.length > 0) { if (shuffleToggle.checked) shuffle(allFiles); else if (baseOrder.length) { allFiles.length = 0; allFiles.push(...baseOrder); } applyFilterAndRebuild(); targetY = curY = 0; } e.preventDefault(); }
+  e => { reshuffleFiles(); e.preventDefault(); }
 );
 
 document.addEventListener('keydown', (e) => {
