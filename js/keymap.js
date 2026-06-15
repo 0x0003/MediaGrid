@@ -9,8 +9,7 @@ function onHotkey(keys, desc, ...rest) {
   }
 }
 
-/* --- UI toggles --- */
-
+/* UI toggles */
 onHotkey('z / ?', 'Toggle this popup',
   e => e.key.toLowerCase() === 'z' || e.key === '?',
   e => { e.preventDefault(); toggleHotkeyPopup(); }
@@ -32,8 +31,7 @@ onHotkey(null, 'Close zoom / hotkey popup',
   e => { e.preventDefault(); if (zoomedMedia) _zoomExitHandler(); else hideHotkeyPopup(); }
 );
 
-/* --- Column operations --- */
-
+/* Column operations */
 onHotkey('Ctrl+1-9', 'Pixelate column',
   e => e.ctrlKey && e.code.startsWith('Digit'),
   e => { const n = Number(e.code.slice(5)); if (n >= 1 && n <= 9) toggleColumnBlur(n - 1); e.preventDefault(); }
@@ -74,8 +72,7 @@ onHotkey('Ctrl+LMB', 'Pixelate column',
     e.preventDefault();
   });
 
-/* --- Auto-scroll --- */
-
+/* Auto-scroll */
 onHotkey('Space / p', 'Toggle auto-scroll',
   e => e.key === ' ' || e.key.toLowerCase() === 'p',
   e => { if (autoTicker) stopAuto(); else startAuto(); updateToggleText(); e.preventDefault(); }
@@ -91,8 +88,7 @@ onHotkey('ArrowLeft / h / a', 'Decrease auto-scroll speed',
   e => { speedInput.value = Math.max(1, Number(speedInput.value) - 1); speedInput.dispatchEvent(new Event('input')); e.preventDefault(); }
 );
 
-/* --- Navigation --- */
-
+/* Navigation */
 onHotkey('PageUp / Shift+K / Shift+W', 'Scroll up (page)',
   e => e.key === 'PageUp' || (e.shiftKey && (e.key.toLowerCase() === 'k' || e.key.toLowerCase() === 'w')),
   e => { targetY -= viewport.clientHeight * 0.9; clampTarget(); e.preventDefault(); }
@@ -113,8 +109,7 @@ onHotkey('s / j', 'Scroll down (line)',
   e => { targetY += 120; clampTarget(); e.preventDefault(); }
 );
 
-/* --- Volume --- */
-
+/* Volume */
 onHotkey('ArrowUp', 'Increase volume',
   e => e.key === 'ArrowUp',
   e => { volumeInput.value = Math.max(0, Math.min(1, parseFloat(volumeInput.value) + 0.05)); volumeInput.dispatchEvent(new Event('input')); e.preventDefault(); }
@@ -125,8 +120,7 @@ onHotkey('ArrowDown', 'Decrease volume',
   e => { volumeInput.value = Math.max(0, Math.min(1, parseFloat(volumeInput.value) - 0.05)); volumeInput.dispatchEvent(new Event('input')); e.preventDefault(); }
 );
 
-/* --- Misc --- */
-
+/* Misc */
 onHotkey('Enter / r', 'Reshuffle files',
   e => e.key.toLowerCase() === 'r' || e.key === 'Enter',
   e => { reshuffleFiles(); e.preventDefault(); }

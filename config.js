@@ -1,7 +1,6 @@
 // startup values
 const CONFIG = {
-  /* --- Top bar --- */
-
+  /* Top bar */
   // Number of columns (1-9)
   columns: 4,
 
@@ -25,8 +24,7 @@ const CONFIG = {
   // Theme: 'system' | 'light' | 'dark'
   theme: 'system',
 
-  /* --- Files card --- */
-
+  /* Files card */
   // Filter files from subdirectories
   ignoreSubdirs: true,
 
@@ -36,8 +34,7 @@ const CONFIG = {
   // Show the files panel at startup
   loadPanelVisible: true,
 
-  /* --- Grid engine --- */
-
+  /* Grid engine */
   // Number of items assigned per batch
   assignBatch: 48,
 

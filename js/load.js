@@ -127,7 +127,6 @@ function updateMediaStatus() {
 }
 
 /* drag and drop zone */
-
 function traverseEntry(entry, path) {
   return new Promise(resolve => {
     if (entry.isFile) {

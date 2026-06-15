@@ -112,8 +112,6 @@ viewport.addEventListener('touchmove', e => { if (touchY === null) return; const
 viewport.addEventListener('touchend', () => touchY = null);
 viewport.addEventListener('wheel', e => { e.preventDefault(); targetY += e.deltaY; clampTarget(); }, { passive: false });
 
-
-
 /* Column lock */
 function toggleColumnLock(colIndex) {
   if (colIndex < 0 || colIndex >= columns.length) return;
@@ -141,8 +139,6 @@ function toggleColumnLock(colIndex) {
     lockedColumns.set(colIndex, lockBaseRounded);
   }
 }
-
-
 
 /* Column blur / pixelation */
 function pixelateImage(it) {
@@ -226,8 +222,6 @@ function toggleColumnBlur(colIndex) {
   else blurredColumns.add(colIndex);
   applyColumnBlur();
 }
-
-
 
 /* Zoom */
 let zoomedMedia = null;
@@ -336,8 +330,6 @@ function enterZoom(it) {
   _zoomExitHandler = exitHandler;
   zoomOverlay.addEventListener('click', exitHandler, { once: true });
 }
-
-
 
 /* File info popup */
 let popupColorIndex = 0;
@@ -452,8 +444,6 @@ function showInfoPopup(it, clientX, clientY) {
   document.addEventListener('keydown', onEsc);
   activePopups.set(it.id, { popup, borderEl, color });
 }
-
-
 
 /* Hotkey reference popup */
 const hotkeyOverlay = document.createElement('div');
