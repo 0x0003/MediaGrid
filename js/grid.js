@@ -254,59 +254,46 @@ function ensureAssigned() {
 
 /* main frame loop */
 function frame() {
-  if (columns.length === 0) {
-    raf = requestAnimationFrame(frame);
-    return;
-  }
-
-  const allLocked = lockedColumns.size === columns.length;
-  if (allLocked) {
+  if (columns.length === 0 || lockedColumns.size === columns.length) {
     raf = requestAnimationFrame(frame);
     return;
   }
 
   curY += (targetY - curY) * EASE;
   if (Math.abs(targetY - curY) < 0.5) curY = targetY;
-
   if (totalHeight > 0 && curY < 0) { curY = 0; targetY = 0; }
 
   const curYr = Math.round(curY);
   container.style.transform = `translate3d(0, ${-curYr}px, 0)`;
 
   const children = container.children;
-  if (lockedColumns.size === 0) {
+  if (lockedColumns.size > 0) {
+    for (let i = 0; i < children.length; i++) {
+      const node = children[i];
+      const nodeId = +node.dataset.id;
+      if (!Number.isFinite(nodeId)) continue;
+      const nodeIt = items[nodeId];
+      if (!nodeIt) continue;
+      const col = nodeIt.col;
+      if (lockedColumns.has(col)) {
+        const lockBase = lockedColumns.get(col);
+        const delta = curYr - lockBase;
+        node.style.transform = `translate3d(0, ${delta}px, 0)`;
+        node.classList.add('locked');
+      } else {
+        if (node.style.transform) node.style.transform = '';
+        node.classList.remove('locked');
+      }
+    }
+  } else {
     for (let i = 0; i < children.length; i++) {
       const node = children[i];
       if (node.style.transform) node.style.transform = '';
-    }
-    materialize();
-    ensureAssigned();
-    raf = requestAnimationFrame(frame);
-    return;
-  }
-
-  for (let i = 0; i < children.length; i++) {
-    const node = children[i];
-    const nodeId = +node.dataset.id;
-    if (!Number.isFinite(nodeId)) continue;
-    const nodeIt = items[nodeId];
-    if (!nodeIt) continue;
-
-    const col = nodeIt.col;
-    if (lockedColumns.has(col)) {
-      const lockBase = lockedColumns.get(col);
-      const delta = curYr - lockBase;
-      node.style.transform = `translate3d(0, ${delta}px, 0)`;
-      node.classList.add('locked');
-    } else {
-      if (node.style.transform) node.style.transform = '';
-      node.classList.remove('locked');
     }
   }
 
   materialize();
   ensureAssigned();
-
   raf = requestAnimationFrame(frame);
 }
 
