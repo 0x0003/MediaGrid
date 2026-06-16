@@ -19,7 +19,7 @@ function updateDirList() {
   dirList.replaceChildren();
   if (pendingDirectories.length === 0) {
     const el = document.createElement('div');
-    el.style.color = 'var(--muted)';
+    el.className = 'empty-dir';
     el.textContent = '~empty~';
     dirList.appendChild(el);
   }

@@ -199,19 +199,7 @@ function toggleColumnBlur(colIndex) {
 let zoomedMedia = null;
 let _zoomExitHandler = null;
 const zoomOverlay = document.createElement('div');
-
-Object.assign(zoomOverlay.style, {
-  position: 'fixed',
-  inset: '0',
-  display: 'none',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 9000,
-  cursor: 'zoom-out',
-  background: 'rgba(18,18,18,0.85)',
-  backdropFilter: 'blur(6px)',
-  WebkitBackdropFilter: 'blur(6px)',
-});
+zoomOverlay.className = 'zoom-overlay';
 document.body.appendChild(zoomOverlay);
 
 function pauseAllGridVideos() {
@@ -261,14 +249,7 @@ function enterZoom(it) {
     zoomOverlay.style.display = 'none'; resumeAllGridVideos(); return;
   }
 
-  Object.assign(clone.style, {
-    maxWidth: '100vw',
-    maxHeight: '100vh',
-    width: 'auto',
-    height: 'auto',
-    objectFit: 'contain',
-    display: 'block',
-  });
+  clone.className = 'zoom-clone';
 
   zoomOverlay.appendChild(clone);
   zoomedMedia = it;
@@ -316,15 +297,7 @@ function highlightMedia(it, color) {
   if (!borderEl) {
     borderEl = document.createElement('div');
     borderEl.className = 'highlight-border';
-    Object.assign(borderEl.style, {
-      position: 'absolute',
-      inset: '0',
-      border: `5px solid ${color}`,
-      pointerEvents: 'none',
-      boxSizing: 'border-box',
-      opacity: '0.85',
-      transition: 'opacity 0.28s ease',
-    });
+    borderEl.style.border = `5px solid ${color}`;
     wrap.appendChild(borderEl);
   } else {
     borderEl.style.borderColor = color;
@@ -356,23 +329,12 @@ function showInfoPopup(it, clientX, clientY) {
   }
 
   const popup = document.createElement('div');
-  Object.assign(popup.style, {
-    position: 'absolute',
-    background: 'rgba(18,18,18,0.85)',
-    color: '#e8e3e3',
-    padding: '8px 12px',
-    pointerEvents: 'auto',
-    whiteSpace: 'nowrap',
-    transition: 'opacity 0.3s',
-    opacity: '0',
-    zIndex: 5000,
-    border: `5px solid ${color}`,
-    boxSizing: 'border-box',
-  });
+  popup.className = 'info-popup';
+  popup.style.border = `5px solid ${color}`;
   popup.innerHTML = `
-    <div style="font-weight:600; margin-bottom:6px;">${escapeHtml(file.name)}</div>
-    <div style="font-size:14px; opacity:.9; margin-bottom:4px;">Size: ${size}</div>
-    <div style="font-size:13px; opacity:.8;">Path: ${escapeHtml(path)}</div>
+    <div class="popup-name">${escapeHtml(file.name)}</div>
+    <div class="popup-size">Size: ${size}</div>
+    <div class="popup-path">Path: ${escapeHtml(path)}</div>
   `;
   container.appendChild(popup);
 
@@ -409,53 +371,21 @@ function showInfoPopup(it, clientX, clientY) {
 
 /* Hotkey reference popup */
 const hotkeyOverlay = document.createElement('div');
-Object.assign(hotkeyOverlay.style, {
-  position: 'fixed',
-  top: '0',
-  left: '0',
-  width: '100vw',
-  height: '100vh',
-  background: 'rgba(18,18,18,0.7)',
-  backdropFilter: 'blur(6px)',
-  zIndex: 9999,
-  display: 'none',
-});
+hotkeyOverlay.className = 'hotkey-overlay';
 document.body.appendChild(hotkeyOverlay);
 
 const hotkeyPopup = document.createElement('div');
-Object.assign(hotkeyPopup.style, {
-  position: 'fixed',
-  background: 'rgba(18,18,18,0)',
-  color: '#e8e3e3',
-  padding: '16px 24px',
-  maxHeight: '70vh',
-  overflowY: 'auto',
-  fontSize: '22px',
-  lineHeight: '1.5',
-  whiteSpace: 'pre',
-  display: 'none',
-  zIndex: 10000,
-  transform: 'translate(-50%, -50%)',
-  top: '50%',
-  left: '50%',
-});
+hotkeyPopup.className = 'hotkey-popup';
 document.body.appendChild(hotkeyPopup);
 
 function showHotkeyPopup() {
   hotkeyPopup.innerHTML = '';
   const grid = document.createElement('div');
-  Object.assign(grid.style, {
-    display: 'grid',
-    gridTemplateColumns: 'max-content 1fr',
-    columnGap: '24px',
-    rowGap: '16px',
-    whiteSpace: 'normal',
-  });
+  grid.className = 'hotkey-grid';
   hotkeys.forEach(h => {
     const keyEl = document.createElement('div');
+    keyEl.className = 'key-label';
     keyEl.textContent = h.keys + ' :';
-    keyEl.style.fontWeight = '600';
-    keyEl.style.textAlign = 'right';
     const descEl = document.createElement('div');
     descEl.textContent = h.desc;
     grid.appendChild(keyEl);
