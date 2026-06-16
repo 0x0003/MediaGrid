@@ -268,7 +268,7 @@ function applyFilterAndRebuild() {
     return true;
   });
   createColumns(numColumns);
-  assignBatch(ASSIGN_BATCH);
+  assignBatch();
   targetY = curY = 0;
   updateMediaStatus();
 }

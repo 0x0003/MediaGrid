@@ -50,7 +50,7 @@ columnsSelect.addEventListener('change', () => {
   }
   const prevCurY = curY;
   createColumns(n);
-assignBatch(ASSIGN_BATCH);
+assignBatch();
   targetY = curY = prevCurY;
 });
 filterSelect.addEventListener('change', () => applyFilterAndRebuild());

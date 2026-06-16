@@ -1,9 +1,9 @@
 /* constants */
-const ASSIGN_BATCH = CONFIG.assignBatch ?? 48;
-const PRELOAD_SCREENS = CONFIG.preloadScreens ?? 4;
-const EST_RATIO = CONFIG.estRatio ?? 0.75;
-const OBS_THRESHOLD = CONFIG.obsThreshold ?? 0.45;
-const EASE = CONFIG.ease ?? 0.12;
+const ASSIGN_BATCH = CONFIG.assignBatch;
+const PRELOAD_SCREENS = CONFIG.preloadScreens;
+const EST_RATIO = CONFIG.estRatio;
+const OBS_THRESHOLD = CONFIG.obsThreshold;
+const EASE = CONFIG.ease;
 
 /* grid state */
 let allFiles = [];
@@ -256,7 +256,7 @@ function ensureAssigned() {
   for (let i = 1; i < columns.length; i++) if (columns[i].height < shortest) shortest = columns[i].height;
   const viewBottom = curY + viewport.clientHeight;
   if (shortest < viewBottom + viewport.clientHeight * PRELOAD_SCREENS) {
-    assignBatch(ASSIGN_BATCH);
+    assignBatch();
   }
 }
 
