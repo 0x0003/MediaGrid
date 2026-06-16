@@ -77,7 +77,7 @@ loadBtn.addEventListener('click', () => {
     dir.files.sort((a, b) => {
       const ap = a.webkitRelativePath || a.relativePath || a.name || '';
       const bp = b.webkitRelativePath || b.relativePath || b.name || '';
-      return ap < bp ? -1 : ap > bp ? 1 : 0;
+      return ap.localeCompare(bp);
     });
   }
 

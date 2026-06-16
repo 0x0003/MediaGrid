@@ -38,11 +38,10 @@ const playObserver = new IntersectionObserver(entries => {
 
 /* show/hide prompt depending on files loaded */
 function updatePrompt() {
-  if (allFiles.length === 0) {
-    if (emptyPrompt) { emptyPrompt.style.display = 'flex'; emptyPrompt.setAttribute('aria-hidden', 'false'); }
-  } else {
-    if (emptyPrompt) { emptyPrompt.style.display = 'none'; emptyPrompt.setAttribute('aria-hidden', 'true'); }
-  }
+  if (!emptyPrompt) return;
+  const isEmpty = allFiles.length === 0;
+  emptyPrompt.style.display = isEmpty ? 'flex' : 'none';
+  emptyPrompt.setAttribute('aria-hidden', String(!isEmpty));
 }
 
 function clampTarget() {
@@ -105,7 +104,6 @@ function assignBatch(count = ASSIGN_BATCH) {
     }
     const j = pendingIndex % columns.length;
     const file = filesFiltered[pendingIndex++];
-    if (!file) { if (pendingIndex >= filesFiltered.length) break; continue; }
     const estH = Math.max(24, Math.round((file._estRatio || EST_RATIO) * columnWidth));
     const it = {
       id: items.length,
@@ -190,20 +188,10 @@ function mountMediaInto(wrap, it, idxInCol) {
   }
 }
 
-function getViewportBounds(curY, viewportHeight) {
-  return {
-    top: curY - viewportHeight * 0.5,
-    bottom: curY + viewportHeight + viewportHeight * PRELOAD_SCREENS,
-  };
-}
-
-function shouldItemExist(item, colLocked, bounds) {
-  if (colLocked) return true;
-  return item.top + item.height >= bounds.top && item.top <= bounds.bottom;
-}
-
 function materialize() {
-  const bounds = getViewportBounds(curY, viewport.clientHeight);
+  const viewH = viewport.clientHeight;
+  const boundsTop = curY - viewH * 0.5;
+  const boundsBottom = curY + viewH + viewH * PRELOAD_SCREENS;
 
   for (let ci = 0; ci < columns.length; ci++) {
     const col = columns[ci];
@@ -213,7 +201,7 @@ function materialize() {
       const it = col.items[idx];
       const itemTop = it.top;
 
-      const shouldExist = shouldItemExist(it, colLocked, bounds);
+      const shouldExist = colLocked || (itemTop + it.height >= boundsTop && itemTop <= boundsBottom);
 
       if (shouldExist && !it.el) {
         const wrap = document.createElement('div');
@@ -249,7 +237,7 @@ function materialize() {
         it.el = null;
       }
 
-      if (!colLocked && !it.el && itemTop > bounds.bottom) break;
+      if (!colLocked && !it.el && itemTop > boundsBottom) break;
     }
   }
 }

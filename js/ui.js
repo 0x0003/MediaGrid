@@ -3,14 +3,7 @@ fileButton.addEventListener('click', () => fileInput.click());
 
 /* Theme */
 {
-  let isLight;
-  if (CONFIG.theme === 'light') {
-    isLight = true;
-  } else if (CONFIG.theme === 'dark') {
-    isLight = false;
-  } else {
-    isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-  }
+  const isLight = CONFIG.theme === 'light' || (CONFIG.theme !== 'dark' && window.matchMedia('(prefers-color-scheme: light)').matches);
   document.documentElement.classList.toggle('light', isLight);
   if (themeToggle) themeToggle.textContent = isLight ? '\u2600' : '\u263E';
 }
