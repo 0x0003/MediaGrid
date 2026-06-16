@@ -1,6 +1,6 @@
 // startup values
 const CONFIG = {
-  /* Top bar */
+  /* General */
   // Number of columns (1-9)
   columns: 4,
 
@@ -17,14 +17,11 @@ const CONFIG = {
 
   // Volume
   volume: 0.1,
-  volumeMin: 0,
-  volumeMax: 1,
   volumeStep: 0.01,
 
   // Theme: 'system' | 'light' | 'dark'
   theme: 'system',
 
-  /* Files card */
   // Filter files from subdirectories
   ignoreSubdirs: true,
 
@@ -33,6 +30,9 @@ const CONFIG = {
 
   // Show the files panel at startup
   loadPanelVisible: true,
+
+  // How long the file info popup will stay visible before automatically closing
+  popupFadeout: 3000,
 
   /* Grid engine */
   // Number of items assigned per batch
@@ -48,8 +48,5 @@ const CONFIG = {
   obsThreshold: 0.45,
 
   // Scroll easing factor
-  ease: 0.12,
-
-  // How long the file info popup will stay visible before automatically closing
-  popupFadeout: 3000
+  ease: 0.12
 };

@@ -33,8 +33,6 @@ if (CONFIG.speed != null) speedInput.value = CONFIG.speed;
 if (CONFIG.speedMin != null) speedInput.min = CONFIG.speedMin;
 if (CONFIG.speedMax != null) speedInput.max = CONFIG.speedMax;
 if (CONFIG.volume != null) volumeInput.value = CONFIG.volume;
-if (CONFIG.volumeMin != null) volumeInput.min = CONFIG.volumeMin;
-if (CONFIG.volumeMax != null) volumeInput.max = CONFIG.volumeMax;
 if (CONFIG.volumeStep != null) volumeInput.step = CONFIG.volumeStep;
 if (CONFIG.ignoreSubdirs != null) ignoreSubdirsCheckbox.checked = CONFIG.ignoreSubdirs;
 if (CONFIG.regexFilter != null) regexInput.value = CONFIG.regexFilter;
