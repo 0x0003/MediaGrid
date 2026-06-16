@@ -27,3 +27,7 @@ Open `MediaGrid.html` in your browser of choice.
 
 Startup values in `config.js` can be edited before opening the page.
 
+## Caveats
+
+- Browsers will show a permission notice when selecting directories using the "Select directories..." button. This is standard and unavoidable. No data is transmitted - processing is entirely client-side. Drag & drop is unaffected.
+
