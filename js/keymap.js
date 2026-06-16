@@ -32,12 +32,6 @@ onHotkey(null, 'Close zoom / hotkey popup',
 );
 
 /* Column operations */
-onHotkey('Ctrl+1-9', 'Pixelate column',
-  e => e.ctrlKey && e.code.startsWith('Digit'),
-  e => { e.preventDefault(); const n = Number(e.code.slice(5)); if (n >= 1 && n <= 9) toggleColumnBlur(n - 1); }
-);
-onHotkey(null, null, e => e.key === 'Control', _ => {});
-
 onHotkey('Shift+1-9', 'Toggle column scroll lock',
   e => e.code.startsWith('Digit') && e.shiftKey,
   e => { e.preventDefault(); const n = Number(e.code.slice(5)); if (n >= 1 && n <= 9) toggleColumnLock(n - 1); }
@@ -132,7 +126,13 @@ onHotkey('Enter / r', 'Reshuffle files',
 
 document.addEventListener('keydown', (e) => {
   if (e.target.tagName.match(/^(input|textarea|select)$/i)) return;
-  if (e.altKey || e.metaKey) return;
+  if (e.ctrlKey && e.code.startsWith('Digit')) {
+    e.preventDefault();
+    const n = Number(e.code.slice(5));
+    if (n >= 1 && n <= 9) toggleColumnBlur(n - 1);
+    return;
+  }
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
   for (const h of _hotkeyHandlers) {
     if (h.match(e)) { h.handle(e); return; }
   }
