@@ -9,7 +9,14 @@
   --ph2: #2a2d33;
   --placeholder-text: rgba(255, 255, 255, 0.06);
   --input-focus-bg: #1e2024;
-  --media-bg: #000;
+  --media-bg: #000000;
+  --shadow: rgba(0,0,0,0.6);
+  --panel-shadow: rgba(0,0,0,0.5);
+  --load-btn-bg: #8c997d;
+  --load-btn-text: #ffffff;
+  --remove-color: #ee5555;
+  --remove-hover: #bb3333;
+  --overlay-bg: rgba(18,18,18,0.75);
 
   --fs-xs: 14px;
   --fs-sm: 15px;
@@ -79,7 +86,7 @@ body {
   border: none;
   cursor: pointer;
   color: var(--text);
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 2px 6px var(--shadow));
   padding: 0;
   margin: 0;
   width: 34px;
@@ -125,7 +132,7 @@ body {
   max-height: 95vh;
   z-index: 250;
   background: var(--panel);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 24px var(--panel-shadow);
   padding: 10px 16px;
   grid-template-columns: max-content 1fr;
   gap: 10px 16px;
@@ -185,7 +192,7 @@ body {
 #panelCloseWrap:hover #panelClose {
   opacity: 1;
   pointer-events: auto;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 2px 6px var(--shadow));
 }
 #panelClose:hover {
   color: var(--accent);
@@ -218,9 +225,9 @@ body {
   cursor: default;
 }
 #loadBtn:not(:disabled) {
-  background: #8c997d;
-  border-color: #8c997d;
-  color: #fff;
+  background: var(--load-btn-bg);
+  border-color: var(--load-btn-bg);
+  color: var(--load-btn-text);
 }
 
 #panelRegex {
@@ -285,10 +292,10 @@ body {
   color: var(--text);
 }
 #dirList > div.pending-remove {
-  color: #e55;
+  color: var(--remove-color);
 }
 #dirList > div.pending-remove:hover {
-  color: #b33;
+  color: var(--remove-hover);
 }
 #dirList > div > .dir-sym {
   flex-shrink: 0;
@@ -488,7 +495,7 @@ input[type="range"]::-moz-range-thumb {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(18,18,18,0.75);
+  background: var(--overlay-bg);
   backdrop-filter: blur(4px);
   border: 3px dashed var(--accent);
   pointer-events: none;
