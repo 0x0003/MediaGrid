@@ -2,6 +2,8 @@
 
 A zero-dependency, client-side media viewer for browsing images and videos from local directories, arranged in an infinite scrollable grid.
 
+![screenshot](https://github.com/user-attachments/assets/1bec8416-b67b-45ac-8636-41bb3cdfbb3f)
+
 ## Usage
 
 Open `MediaGrid.html` in your browser of choice.
