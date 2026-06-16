@@ -136,7 +136,7 @@ document.addEventListener('keydown', (e) => {
 
 onHotkey('LMB', 'Show file info popup and copy name to clipboard',
   container, 'click',
-  async (e) => {
+  (e) => {
     if (zoomedMedia) return;
     const wrap = e.target.closest && e.target.closest('.item');
     if (!wrap) return;
@@ -144,7 +144,7 @@ onHotkey('LMB', 'Show file info popup and copy name to clipboard',
     if (Number.isNaN(id)) return;
     const it = items.find(i => i.id === id);
     if (!it || !it.file) return;
-    await copyTextToClipboard(it.file.name);
+    copyTextToClipboard(it.file.name);
     showInfoPopup(it, e.clientX, e.clientY);
   });
 

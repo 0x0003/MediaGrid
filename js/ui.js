@@ -374,6 +374,7 @@ function highlightMedia(it, color) {
 let activePopups = new Map();
 
 function showInfoPopup(it, clientX, clientY) {
+  if (zoomedMedia) return;
   const existing = activePopups.get(it.id);
   if (existing) {
     existing.popup.remove();
