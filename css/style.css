@@ -207,7 +207,7 @@ body {
 
 #panelButtons {
   display: flex;
-  gap: 4px;
+  gap: 10px;
 }
 #panelButtons button {
   box-sizing: border-box;
