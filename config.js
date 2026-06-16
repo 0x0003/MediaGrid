@@ -49,4 +49,7 @@ const CONFIG = {
 
   // Scroll easing factor
   ease: 0.12,
+
+  // How long the file info popup will stay visible before automatically closing
+  popupFadeout: 3000
 };

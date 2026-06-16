@@ -312,9 +312,7 @@ function showInfoPopup(it, clientX, clientY) {
   if (zoomedMedia) return;
   const existing = activePopups.get(it.id);
   if (existing) {
-    existing.popup.remove();
-    if (existing.borderEl) existing.borderEl.remove();
-    activePopups.delete(it.id);
+    existing.dismiss();
     return;
   }
   const file = it.file;
@@ -350,23 +348,30 @@ function showInfoPopup(it, clientX, clientY) {
   popup.style.top = y + 'px';
   requestAnimationFrame(() => popup.style.opacity = '1');
 
-  let fadeTimeout = setTimeout(() => fadeOut(), 3000);
+  let dismissed = false;
+  function dismiss() {
+    if (dismissed) return;
+    dismissed = true;
+    clearTimeout(fadeTimeout);
+    popup.remove();
+    if (borderEl) borderEl.remove();
+    activePopups.delete(it.id);
+  }
+
+  let fadeTimeout = setTimeout(fadeOut, CONFIG.popupFadeout);
   function fadeOut() {
     popup.style.opacity = '0';
     if (borderEl) borderEl.style.opacity = '0';
-    setTimeout(() => {
-      popup.remove();
-      if (borderEl) borderEl.remove();
-      activePopups.delete(it.id);
-    }, 320);
+    fadeTimeout = setTimeout(dismiss, 320);
   }
+  popup.addEventListener('click', (e) => { e.stopPropagation(); dismiss(); });
   popup.addEventListener('mouseenter', () => clearTimeout(fadeTimeout));
-  popup.addEventListener('mouseleave', () => fadeTimeout = setTimeout(fadeOut, 3000));
+  popup.addEventListener('mouseleave', () => fadeTimeout = setTimeout(fadeOut, CONFIG.popupFadeout));
   function onRightClick() { fadeOut(); document.removeEventListener('contextmenu', onRightClick); }
   document.addEventListener('contextmenu', onRightClick);
   function onEsc(e) { if (e.key === 'Escape') { fadeOut(); document.removeEventListener('keydown', onEsc); } }
   document.addEventListener('keydown', onEsc);
-  activePopups.set(it.id, { popup, borderEl, color });
+  activePopups.set(it.id, { popup, borderEl, color, dismiss });
 }
 
 /* Hotkey reference popup */
