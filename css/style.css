@@ -16,9 +16,7 @@
   --load-btn-text: #ffffff;
   --remove-color: #ee5555;
   --remove-hover: #bb3333;
-  --overlay-bg: rgba(18,18,18,0.75);
-  --overlay-mid: rgba(18,18,18,0.7);
-  --overlay-heavy: rgba(18,18,18,0.85);
+  --overlay-bg: rgba(18,18,18,0.85);
 
   --fs-xs: 14px;
   --fs-sm: 15px;
@@ -492,19 +490,28 @@ input[type="range"]::-moz-range-thumb {
   border: none;
 }
 
-#dropOverlay {
+.overlay {
   position: fixed;
   inset: 0;
-  z-index: 20000;
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 9000;
   background: var(--overlay-bg);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.overlay-zoom {
+  cursor: zoom-out;
+}
+
+.overlay-drop {
+  z-index: 20000;
   border: 3px dashed var(--accent);
   pointer-events: none;
 }
-#dropOverlay.visible {
+.overlay-drop.visible {
   display: flex;
 }
 #dropOverlay > div {
@@ -516,7 +523,9 @@ input[type="range"]::-moz-range-thumb {
   gap: 8px;
 }
 
-/* === from JS (ui.js) === */
+.overlay-hotkey {
+  z-index: 9999;
+}
 
 .highlight-border {
   position: absolute;
@@ -525,19 +534,6 @@ input[type="range"]::-moz-range-thumb {
   box-sizing: border-box;
   opacity: 0.85;
   transition: opacity 0.28s ease;
-}
-
-.zoom-overlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9000;
-  cursor: zoom-out;
-  background: var(--overlay-heavy);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .zoom-clone {
@@ -551,7 +547,7 @@ input[type="range"]::-moz-range-thumb {
 
 .info-popup {
   position: absolute;
-  background: var(--overlay-heavy);
+  background: var(--overlay-bg);
   color: var(--text);
   padding: 8px 12px;
   pointer-events: auto;
@@ -560,18 +556,6 @@ input[type="range"]::-moz-range-thumb {
   opacity: 0;
   z-index: 5000;
   box-sizing: border-box;
-}
-
-.hotkey-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--overlay-mid);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  display: none;
 }
 
 .hotkey-popup {
