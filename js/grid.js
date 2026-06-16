@@ -43,7 +43,6 @@ const playObserver = new IntersectionObserver(entries => {
 
 /* show/hide prompt depending on files loaded */
 function updatePrompt() {
-  if (!emptyPrompt) return;
   const isEmpty = allFiles.length === 0;
   emptyPrompt.style.display = isEmpty ? 'flex' : 'none';
   emptyPrompt.setAttribute('aria-hidden', String(!isEmpty));

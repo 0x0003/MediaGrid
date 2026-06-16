@@ -14,28 +14,45 @@ function removeDirAt(index) {
 }
 
 function updateDirList() {
-  if (!dirList) return;
   const hasUnloaded = pendingDirectories.some(d => !d.loaded);
   const hasPendingRemoval = pendingDirectories.some(d => d._pendingRemove);
   dirList.replaceChildren();
+  if (pendingDirectories.length === 0) {
+    const el = document.createElement('div');
+    el.style.color = 'var(--muted)';
+    el.textContent = '~empty~';
+    dirList.appendChild(el);
+  }
   pendingDirectories.forEach((d, i) => {
     const el = document.createElement('div');
-    el.textContent = `${i + 1}. ${d.name}/`;
+    const label = document.createElement('span');
+    const idx = String(i + 1).padStart(2, '0');
+    label.textContent = `${idx}. ${d.name}/`;
+    el.appendChild(label);
+    const sym = document.createElement('span');
+    sym.className = 'dir-sym';
     if (d.loaded && d._pendingRemove) {
       el.classList.add('pending-remove');
+      sym.textContent = '\u2717';
+      el.title = 'Click to undo';
       el.addEventListener('click', () => { delete d._pendingRemove; updateDirList(); });
     } else if (d.loaded) {
       el.classList.add('loaded-dir', 'clickable');
+      sym.textContent = '\u2713';
+      el.title = 'Click to remove';
       el.addEventListener('click', () => { d._pendingRemove = true; updateDirList(); });
     } else {
-      el.classList.add('clickable');
+      el.classList.add('clickable', 'pending-load');
+      sym.textContent = '\u25D4';
+      el.title = 'Click to remove';
       el.addEventListener('click', () => removeDirAt(i));
       el.addEventListener('contextmenu', (e) => { e.preventDefault(); removeDirAt(i); });
     }
+    el.appendChild(sym);
     dirList.appendChild(el);
   });
   const hasNeedsReload = pendingDirectories.some(d => d._needsReload);
-  if (loadBtn) loadBtn.disabled = !(hasUnloaded || hasPendingRemoval || hasNeedsReload);
+  loadBtn.disabled = !(hasUnloaded || hasPendingRemoval || hasNeedsReload);
 }
 
 fileInput.addEventListener('change', (e) => {
@@ -55,12 +72,15 @@ function removeDirFiles(d) {
   baseOrder = baseOrder.filter(f => !removeSet.has(f));
 }
 
-ignoreSubdirsCheckbox.addEventListener('change', () => {
+ignoreSubdirsCheckbox.addEventListener('change', markNeedsReload);
+shuffleToggle.addEventListener('change', markNeedsReload);
+
+function markNeedsReload() {
   for (const d of pendingDirectories) {
     if (d.loaded && !d._pendingRemove) d._needsReload = true;
   }
   updateDirList();
-});
+}
 
 loadBtn.addEventListener('click', () => {
   for (const d of pendingDirectories) {
@@ -87,7 +107,7 @@ loadBtn.addEventListener('click', () => {
 
   const regexValue = regexInput.value.trim() || null;
   const re = regexValue ? new RegExp(regexValue, 'i') : null;
-  const ignoreSubdirs = !!(ignoreSubdirsCheckbox && ignoreSubdirsCheckbox.checked);
+  const ignoreSubdirs = ignoreSubdirsCheckbox.checked;
 
   for (const dir of toAdd) {
     for (const f of dir.files) {
@@ -103,9 +123,9 @@ loadBtn.addEventListener('click', () => {
   }
 
   updateDirList();
-  toggleLoadPanel(false);
+  togglePanel(false);
 
-  if (shuffleToggle && shuffleToggle.checked) shuffle(allFiles);
+  if (shuffleToggle.checked) shuffle(allFiles);
   applyFilterAndRebuild();
   updatePrompt();
 });
@@ -119,7 +139,6 @@ regexInput.addEventListener('keydown', (e) => {
 });
 
 function updateMediaStatus() {
-  if (!mediaStatusEl) return;
   if (!filesFiltered || filesFiltered.length === 0) {
     mediaStatusEl.textContent = '';
     return;
@@ -166,7 +185,7 @@ window.addEventListener('dragenter', e => {
   dragCounter++;
   if (e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
     dropOverlay.classList.add('visible');
-    toggleLoadPanel(true);
+    togglePanel(true);
   }
 });
 
@@ -232,7 +251,7 @@ window.addEventListener('drop', async e => {
   pendingDirectories.push({ name: dirName, files: droppedFiles, loaded: false });
   updateDirList();
   updatePrompt();
-  toggleLoadPanel(true);
+  togglePanel(true);
 });
 
 function applyFilterAndRebuild() {
@@ -253,3 +272,5 @@ function applyFilterAndRebuild() {
   targetY = curY = 0;
   updateMediaStatus();
 }
+
+updateDirList();

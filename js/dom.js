@@ -1,5 +1,6 @@
 const topTrigger = document.getElementById('top-trigger');
-const header = document.getElementById('header');
+const panel = document.getElementById('panel');
+const menuToggle = document.getElementById('menuToggle');
 const fileInput = document.getElementById('file');
 const fileButton = document.getElementById('fileButton');
 const columnsSelect = document.getElementById('columns');
@@ -19,9 +20,10 @@ const themeToggle = document.getElementById('themeToggle');
 const dirList = document.getElementById('dirList');
 const loadBtn = document.getElementById('loadBtn');
 const shuffleToggle = document.getElementById('shuffleToggle');
-const loadPanel = document.getElementById('loadPanel');
-const loadPanelToggle = document.getElementById('loadPanelToggle');
 const dropOverlay = document.getElementById('dropOverlay');
+const topBar = document.getElementById('top-bar');
+const topRight = document.getElementById('top-right');
+const panelClose = document.getElementById('panelClose');
 
 /* Apply config to DOM elements */
 if (CONFIG.columns != null) columnsSelect.value = String(CONFIG.columns);

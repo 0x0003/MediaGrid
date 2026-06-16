@@ -15,15 +15,15 @@ onHotkey('z / ?', 'Toggle this popup',
   e => { e.preventDefault(); toggleHotkeyPopup(); }
 );
 
-onHotkey('f / o', 'Toggle load panel',
+onHotkey('f / o', 'Toggle main menu',
   e => e.key.toLowerCase() === 'f' || e.key === 'o',
-  e => { e.preventDefault(); toggleLoadPanel(); }
+  e => { e.preventDefault(); togglePanel(); }
 );
 
 // null keys = hidden from popup (Escape is universal, no need to list it)
 onHotkey(null, 'Close files card',
-  e => e.key === 'Escape' && loadPanel.classList.contains('visible') && !zoomedMedia && hotkeyPopup.style.display !== 'block',
-  e => { e.preventDefault(); toggleLoadPanel(false); }
+  e => e.key === 'Escape' && panel.classList.contains('visible') && !zoomedMedia && hotkeyPopup.style.display !== 'block',
+  e => { e.preventDefault(); togglePanel(false); }
 );
 
 onHotkey(null, 'Close zoom / hotkey popup',

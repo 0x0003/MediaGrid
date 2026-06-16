@@ -5,49 +5,40 @@ fileButton.addEventListener('click', () => fileInput.click());
 {
   const isLight = CONFIG.theme === 'light' || (CONFIG.theme !== 'dark' && window.matchMedia('(prefers-color-scheme: light)').matches);
   document.documentElement.classList.toggle('light', isLight);
-  if (themeToggle) themeToggle.textContent = isLight ? '\u2600' : '\u263E';
 }
 
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    const on = document.documentElement.classList.toggle('light');
-    themeToggle.textContent = on ? '\u2600' : '\u263E';
-    updateSliderFill(speedInput);
-    updateSliderFill(volumeInput);
-  });
-}
+themeToggle.addEventListener('click', () => {
+  document.documentElement.classList.toggle('light');
+  updateSliderFill(speedInput);
+  updateSliderFill(volumeInput);
+});
 
-/* Header visibility */
-function updateHeaderVisibilityFromPointer(clientY) {
-  if (loadPanel.classList.contains('visible')) return;
-  if (header.contains(document.activeElement)) return;
-  const rect = topTrigger.getBoundingClientRect();
-  const inTrigger = clientY >= rect.top && clientY <= rect.bottom;
-  if (inTrigger) {
-    header.classList.add('visible');
-  } else {
-    header.classList.remove('visible');
-    const focused = header.querySelector(':focus');
-    if (focused) focused.blur();
-    if (viewport) viewport.focus();
+/* Top bar visibility */
+function updateTopBarVisibility(clientY) {
+  let show = panel.classList.contains('visible');
+  if (!show && clientY != null) {
+    const rect = topTrigger.getBoundingClientRect();
+    show = clientY >= rect.top && clientY <= rect.bottom;
   }
+  topBar.classList.toggle('visible', show);
+  topRight.classList.toggle('visible', show);
 }
 
 document.addEventListener('pointermove', (e) => {
-  updateHeaderVisibilityFromPointer(e.clientY);
+  updateTopBarVisibility(e.clientY);
 });
-document.addEventListener('pointerleave', () => { if (!loadPanel.classList.contains('visible') && !header.contains(document.activeElement)) header.classList.remove('visible'); });
-topTrigger.addEventListener('pointerdown', (e) => updateHeaderVisibilityFromPointer(e.clientY), { passive: true });
+document.addEventListener('pointerleave', () => updateTopBarVisibility());
+topTrigger.addEventListener('pointerdown', (e) => updateTopBarVisibility(e.clientY), { passive: true });
 
-/* Load panel toggle */
-function toggleLoadPanel(show) {
-  if (show === undefined) show = !loadPanel.classList.contains('visible');
-  loadPanel.classList.toggle('visible', show);
-  header.classList.toggle('visible', show);
+/* Panel toggle */
+function togglePanel(show) {
+  if (show === undefined) show = !panel.classList.contains('visible');
+  panel.classList.toggle('visible', show);
+  updateTopBarVisibility();
 }
-loadPanelToggle.addEventListener('click', () => toggleLoadPanel());
-document.getElementById('loadPanelClose').addEventListener('click', () => toggleLoadPanel(false));
-toggleLoadPanel(CONFIG.loadPanelVisible);
+menuToggle.addEventListener('click', () => togglePanel());
+panelClose.addEventListener('click', () => togglePanel(false));
+togglePanel(CONFIG.loadPanelVisible);
 
 /* Columns / Filter / Reshuffle */
 columnsSelect.addEventListener('change', () => {
@@ -59,7 +50,7 @@ columnsSelect.addEventListener('change', () => {
   }
   const prevCurY = curY;
   createColumns(n);
-  assignBatch();
+assignBatch(ASSIGN_BATCH);
   targetY = curY = prevCurY;
 });
 filterSelect.addEventListener('change', () => applyFilterAndRebuild());
@@ -72,8 +63,7 @@ toggleAutoBtn.addEventListener('click', () => {
   updateToggleText();
 });
 function updateToggleText() {
-  if (!toggleAutoBtn) return;
-  toggleAutoBtn.textContent = autoTicker ? 'Pause' : 'Resume';
+  toggleAutoBtn.innerHTML = '<svg width="30" height="30"><use href="#' + (autoTicker ? 'pause' : 'play') + '"/></svg>';
 }
 
 /* Slider fill */
@@ -366,7 +356,6 @@ function showInfoPopup(it, clientX, clientY) {
   }
 
   const popup = document.createElement('div');
-  popup.className = 'info-popup';
   Object.assign(popup.style, {
     position: 'absolute',
     background: 'rgba(18,18,18,0.85)',
@@ -520,6 +509,6 @@ window.addEventListener('resize', () => {
 
 /* Init */
 createColumns(numColumns);
-assignBatch(ASSIGN_BATCH);
+assignBatch();
 raf = requestAnimationFrame(frame);
 updatePrompt();

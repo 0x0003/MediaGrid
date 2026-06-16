@@ -11,7 +11,7 @@ Open `MediaGrid.html` in your browser of choice.
 
 ## Features
 
-- **No building, no executables, no dependencies** - pure HTML, CSS, and ES2020+ JavaScript
+- **No building, no executables, no local server, no dependencies** - pure HTML, CSS, and ES2020+ JavaScript
 - **Stateless** - no localStorage, cookies, or filesystem side effects; close the tab and nothing remains
 - **Multi-directory loading** - pick directories via the file picker or drag & drop; queue up multiple before loading
 - **Grid layout** - adjustable columns (1-9), responsive to viewport resizing

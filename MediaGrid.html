@@ -11,81 +11,107 @@
 
 <body>
 
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </symbol>
+    <symbol id="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </symbol>
+    <symbol id="help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </symbol>
+    <symbol id="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="5" x2="21" y2="5"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="19" x2="21" y2="19"/>
+    </symbol>
+    <symbol id="play" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="6,3 20,12 6,21"/>
+    </symbol>
+    <symbol id="pause" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <rect x="6" y="4" width="4" height="16" rx="1"/>
+      <rect x="14" y="4" width="4" height="16" rx="1"/>
+    </symbol>
+    <symbol id="shuffle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 4v6h6"/>
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+    </symbol>
+  </svg>
+
   <div id="top-trigger" aria-hidden="true"></div>
 
-  <header id="header" aria-hidden="false">
-    <button id="loadPanelToggle" type="button">
-      <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"
-        stroke-linejoin="miter" style="vertical-align:middle;">
-        <path d="M2 4 L4 4 L6 6 L18 6 L18 16 L2 16 Z" />
-      </svg>
+  <div id="top-bar" aria-hidden="false">
+    <button id="menuToggle" type="button" aria-label="Toggle panel"><svg width="30" height="30"><use href="#menu"/></svg></button>
+    <button id="toggleAuto" type="button" aria-label="Toggle auto-scroll"><svg width="30" height="30"><use href="#play"/></svg></button>
+    <button id="reshuffleBtn" type="button" aria-label="Reshuffle"><svg width="30" height="30"><use href="#shuffle"/></svg></button>
+  </div>
+
+  <div id="top-right" aria-hidden="false">
+    <button id="themeToggle" type="button" aria-label="Toggle theme">
+      <svg width="30" height="30" class="sun"><use href="#sun"/></svg>
+      <svg width="30" height="30" class="moon"><use href="#moon"/></svg>
     </button>
+    <button id="hotkeyIcon" type="button" aria-label="Keyboard reference"><svg width="30" height="30"><use href="#help"/></svg></button>
+  </div>
 
-    <div> <label> <b>|</b> </label> </div>
-
-    <label>Columns:
-      <select id="columns">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option selected>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-      </select>
-    </label>
-
-    <label>Media:
-      <select id="filter">
-        <option value="both" selected>Images & Videos</option>
-        <option value="images">Images only</option>
-        <option value="videos">Videos only</option>
-      </select>
-    </label>
-
-    <label style="display:flex; align-items:center; gap:4px; color:var(--muted);">
-      <input type="checkbox" id="shuffleToggle" checked />
-      Shuffle
-    </label>
-
-    <div> <label> <b>|</b> </label> </div>
-
-    <button id="reshuffleBtn" type="button" class="btn">Reshuffle</button>
-    <button id="toggleAuto" type="button" class="btn">Resume</button>
-
-    <label>Speed:
-      <input id="speed" type="range" min="1" max="25" value="3" />
-    </label>
-
-    <label>Volume:
-      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.1" />
-    </label>
-
-    <div id="hotkeyIcon">?</div>
-    <button id="themeToggle" type="button" aria-label="Toggle theme"></button>
-  </header>
-
-  <div id="loadPanel">
-    <div id="loadPanelHeader">
-      <span>Files</span>
-      <button id="loadPanelClose" type="button">&times;</button>
-    </div>
-    <div id="loadPanelButtons">
+  <div id="panel">
+    <div id="panelCloseWrap"><button id="panelClose" type="button">&times;</button></div>
+    <div id="panelButtons">
       <input id="file" type="file" webkitdirectory multiple accept="image/*,video/*" />
       <button type="button" id="fileButton" class="btn">Select directories...</button>
       <button id="loadBtn" class="btn" disabled>Load</button>
     </div>
-    <label id="loadPanelRegex">
+
+    <label id="panelRegex">
       <input id="regexFilter" type="text" placeholder="Regex: * (Press Enter to apply)" />
     </label>
-    <label id="loadPanelSubdirs">
+
+    <div id="panelSubdirs">
       <input type="checkbox" id="ignoreSubdirs" checked />
-      Only top-level
-    </label>
+      <label for="ignoreSubdirs">Only top-level</label>
+      <input type="checkbox" id="shuffleToggle" checked />
+      <label for="shuffleToggle">Shuffle</label>
+    </div>
+
     <div id="dirList"></div>
     <div id="mediaStatus"></div>
+
+    <span class="pl">Columns:</span>
+    <select id="columns" aria-label="Columns">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option selected>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+    </select>
+
+    <span class="pl">Media:</span>
+    <select id="filter" aria-label="Media filter">
+      <option value="both" selected>Images & Videos</option>
+      <option value="images">Images only</option>
+      <option value="videos">Videos only</option>
+    </select>
+
+    <span class="pl">Speed:</span>
+    <input id="speed" type="range" min="1" max="25" value="3" aria-label="Speed" />
+
+    <span class="pl">Volume:</span>
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.1" aria-label="Volume" />
   </div>
 
   <div id="empty-prompt" aria-hidden="false">
