@@ -27,6 +27,7 @@ if (themeToggle) {
 /* Header visibility */
 function updateHeaderVisibilityFromPointer(clientY) {
   if (loadPanel.classList.contains('visible')) return;
+  if (header.contains(document.activeElement)) return;
   const rect = topTrigger.getBoundingClientRect();
   const inTrigger = clientY >= rect.top && clientY <= rect.bottom;
   if (inTrigger) {
@@ -44,7 +45,7 @@ document.addEventListener('pointermove', (e) => {
   lastX = e.clientX; lastY = e.clientY;
   if (typeof e.clientY === 'number') updateHeaderVisibilityFromPointer(e.clientY);
 });
-document.addEventListener('pointerleave', () => { if (!loadPanel.classList.contains('visible')) header.classList.remove('visible'); });
+document.addEventListener('pointerleave', () => { if (!loadPanel.classList.contains('visible') && !header.contains(document.activeElement)) header.classList.remove('visible'); });
 topTrigger.addEventListener('pointerdown', (e) => updateHeaderVisibilityFromPointer(e.clientY), { passive: true });
 
 /* Load panel toggle */
