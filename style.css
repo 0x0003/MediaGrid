@@ -151,6 +151,11 @@ header.visible {
   opacity: 0.4;
   cursor: default;
 }
+#loadBtn:not(:disabled) {
+  background: #8c997d;
+  border-color: #8c997d;
+  color: #fff;
+}
 
 #loadPanelRegex {
   display: flex;
