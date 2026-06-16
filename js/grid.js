@@ -22,14 +22,19 @@ let volumeLevel = parseFloat(volumeInput.value) || 0.1;
 const blurredColumns = new Set();
 const lockedColumns = new Map();
 
+function playWithMutedFallback(el) {
+  el.play().catch(() => {
+    el.muted = true;
+    el.play().then(() => { el.muted = false; }).catch(() => {});
+  });
+}
+
 /* IntersectionObserver to play/pause visible videos */
 const playObserver = new IntersectionObserver(entries => {
   for (const e of entries) {
     const v = e.target;
     if (e.intersectionRatio >= OBS_THRESHOLD) {
-      v.play().catch(async () => {
-        try { v.muted = true; await v.play(); v.muted = false; } catch (_) { }
-      });
+      playWithMutedFallback(v);
     } else {
       v.pause();
     }
@@ -71,22 +76,26 @@ function releaseItemURL(it) {
   entry.refCount--;
   if (entry.refCount <= 0) {
     fileURLMap.delete(it.file);
-    try { URL.revokeObjectURL(entry.url); } catch (e) { }
+    URL.revokeObjectURL(entry.url);
   }
   it.objectURL = null;
 }
 
 /* columns & assignment */
+function recalcColumnWidth() {
+  columnWidth = Math.max(80, Math.floor(viewport.clientWidth / numColumns));
+}
+
 function createColumns(n) {
   numColumns = n;
-  columnWidth = Math.max(80, Math.floor(viewport.clientWidth / numColumns));
+  recalcColumnWidth();
   columns = [];
   for (let i = 0; i < n; i++) columns.push({ height: 0, items: [] });
   items = [];
   pendingIndex = 0;
   totalHeight = 0;
   container.replaceChildren();
-  for (const { url } of fileURLMap.values()) { try { URL.revokeObjectURL(url); } catch (e) { } }
+  for (const { url } of fileURLMap.values()) { URL.revokeObjectURL(url); }
   fileURLMap.clear();
 }
 
@@ -104,7 +113,7 @@ function assignBatch(count = ASSIGN_BATCH) {
     }
     const j = pendingIndex % columns.length;
     const file = filesFiltered[pendingIndex++];
-    const estH = Math.max(24, Math.round((file._estRatio || EST_RATIO) * columnWidth));
+    const estH = Math.max(24, Math.round(EST_RATIO * columnWidth));
     const it = {
       id: items.length,
       file,
@@ -176,7 +185,7 @@ function mountMediaInto(wrap, it, idxInCol) {
         wrap.style.height = realH + 'px';
         adjustColumnAfter(it.col, idxInCol, delta);
       }
-      try { playObserver.observe(vid); } catch (e) { }
+      playObserver.observe(vid);
     }, { once: true });
     vid.addEventListener('error', function onerr() {
       vid.classList.remove('loaded');
@@ -224,16 +233,16 @@ function materialize() {
         unpixelateImage(it);
         const wrap = it.el;
         if (wrap._video) {
-          try { playObserver.unobserve(wrap._video); } catch (e) { }
-          try { wrap._video.pause(); } catch (e) { }
-          try { wrap._video.removeAttribute('src'); } catch (e) { }
+          playObserver.unobserve(wrap._video);
+          wrap._video.pause();
+          wrap._video.removeAttribute('src');
           wrap._video = null;
         } else {
           const img = wrap._img;
-          if (img) try { img.removeAttribute('src'); } catch (e) { }
+          if (img) img.removeAttribute('src');
         }
         releaseItemURL(it);
-        try { wrap.remove(); } catch (e) { }
+        wrap.remove();
         it.el = null;
       }
 
@@ -288,6 +297,7 @@ function frame() {
   } else {
     for (let i = 0; i < children.length; i++) {
       const node = children[i];
+      node.classList.remove('locked');
       if (node.style.transform) node.style.transform = '';
     }
   }

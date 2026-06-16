@@ -33,10 +33,8 @@ function updateHeaderVisibilityFromPointer(clientY) {
   }
 }
 
-let lastX = -1, lastY = -1;
 document.addEventListener('pointermove', (e) => {
-  lastX = e.clientX; lastY = e.clientY;
-  if (typeof e.clientY === 'number') updateHeaderVisibilityFromPointer(e.clientY);
+  updateHeaderVisibilityFromPointer(e.clientY);
 });
 document.addEventListener('pointerleave', () => { if (!loadPanel.classList.contains('visible') && !header.contains(document.activeElement)) header.classList.remove('visible'); });
 topTrigger.addEventListener('pointerdown', (e) => updateHeaderVisibilityFromPointer(e.clientY), { passive: true });
@@ -49,7 +47,7 @@ function toggleLoadPanel(show) {
 }
 loadPanelToggle.addEventListener('click', () => toggleLoadPanel());
 document.getElementById('loadPanelClose').addEventListener('click', () => toggleLoadPanel(false));
-toggleLoadPanel(CONFIG.loadPanelVisible ?? true);
+toggleLoadPanel(CONFIG.loadPanelVisible);
 
 /* Columns / Filter / Reshuffle */
 columnsSelect.addEventListener('change', () => {
@@ -256,16 +254,12 @@ function enterZoom(it) {
   if (!originalEl) { zoomOverlay.style.display = 'none'; resumeAllGridVideos(); return; }
 
   let clone;
-  function zoomURL(it) {
-    return it.objectURL || URL.createObjectURL(it.file);
-  }
+  const url = createObjectURLFor(it);
   if (it.file.type.startsWith('image/')) {
     clone = document.createElement('img');
-    const url = zoomURL(it);
     clone.src = url;
   } else if (it.file.type.startsWith('video/')) {
     clone = document.createElement('video');
-    const url = zoomURL(it);
     clone.src = url;
     clone.volume = volumeLevel;
     clone.autoplay = true;
@@ -290,13 +284,7 @@ function enterZoom(it) {
   zoomedMedia = it;
 
   if (clone.tagName === 'VIDEO') {
-    clone.play().catch(async () => {
-      try {
-        clone.muted = true;
-        await clone.play();
-        clone.muted = false;
-      } catch (e) { }
-    });
+    playWithMutedFallback(clone);
   }
 
   function exitHandler() {
@@ -508,7 +496,7 @@ let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    columnWidth = Math.max(80, Math.floor(viewport.clientWidth / numColumns));
+    recalcColumnWidth();
     for (let ci = 0; ci < columns.length; ci++) {
       const col = columns[ci];
       if (lockedColumns.has(ci)) continue;
@@ -531,9 +519,7 @@ window.addEventListener('resize', () => {
 });
 
 /* Init */
-(function init() {
-  createColumns(numColumns);
-  assignBatch(ASSIGN_BATCH);
-  raf = requestAnimationFrame(frame);
-  updatePrompt();
-})();
+createColumns(numColumns);
+assignBatch(ASSIGN_BATCH);
+raf = requestAnimationFrame(frame);
+updatePrompt();

@@ -1,6 +1,8 @@
 /* multi-directory buffer */
 let pendingDirectories = []; // { name, files, loaded }
 
+function fileRelPath(f) { return f.webkitRelativePath || f.relativePath || f.name || ''; }
+
 function getDirName(files) {
   const rel = files[0]?.webkitRelativePath || '';
   return rel.split('/')[0] || 'Folder';
@@ -74,11 +76,7 @@ loadBtn.addEventListener('click', () => {
   if (toRemove.length === 0 && toAdd.length === 0) return;
 
   for (const dir of toAdd) {
-    dir.files.sort((a, b) => {
-      const ap = a.webkitRelativePath || a.relativePath || a.name || '';
-      const bp = b.webkitRelativePath || b.relativePath || b.name || '';
-      return ap.localeCompare(bp);
-    });
+    dir.files.sort((a, b) => fileRelPath(a).localeCompare(fileRelPath(b)));
   }
 
   for (const dir of toRemove) {
@@ -87,14 +85,14 @@ loadBtn.addEventListener('click', () => {
     if (idx !== -1) pendingDirectories.splice(idx, 1);
   }
 
-  for (const dir of toAdd) {
-    const regexValue = regexInput.value.trim() || null;
-    const re = regexValue ? new RegExp(regexValue, 'i') : null;
-    const ignoreSubdirs = !!(ignoreSubdirsCheckbox && ignoreSubdirsCheckbox.checked);
+  const regexValue = regexInput.value.trim() || null;
+  const re = regexValue ? new RegExp(regexValue, 'i') : null;
+  const ignoreSubdirs = !!(ignoreSubdirsCheckbox && ignoreSubdirsCheckbox.checked);
 
+  for (const dir of toAdd) {
     for (const f of dir.files) {
       if (!f || !f.type || !(f.type.startsWith('image/') || f.type.startsWith('video/'))) continue;
-      const rel = f.webkitRelativePath || f.relativePath || f.name || '';
+      const rel = fileRelPath(f);
       const depth = rel.split('/').filter(Boolean).length;
       if (ignoreSubdirs && depth > 2) continue;
       if (re && !re.test(f.name)) continue;
@@ -205,7 +203,7 @@ window.addEventListener('drop', async e => {
   const items = e.dataTransfer.items;
   if (!items || items.length === 0) return;
 
-  const allFiles = [];
+  const droppedFiles = [];
   for (const item of items) {
     if (item.kind !== 'file') continue;
 
@@ -215,7 +213,7 @@ window.addEventListener('drop', async e => {
         const handle = await item.getAsFileSystemHandle();
         if (!handle || handle.kind !== 'directory') continue;
         const files = await traverseFileSystemHandle(handle, handle.name + '/');
-        allFiles.push(...files);
+        droppedFiles.push(...files);
         continue;
       } catch (e) {}
     }
@@ -225,13 +223,13 @@ window.addEventListener('drop', async e => {
     const entry = getAsEntry ? getAsEntry.call(item) : null;
     if (!entry || entry.isFile) continue;
     const files = await traverseEntry(entry, '');
-    allFiles.push(...files);
+    droppedFiles.push(...files);
   }
 
-  if (allFiles.length === 0) return;
+  if (droppedFiles.length === 0) return;
 
-  const dirName = allFiles[0]?.webkitRelativePath?.split('/')[0] || 'Folder';
-  pendingDirectories.push({ name: dirName, files: allFiles, loaded: false });
+  const dirName = droppedFiles[0]?.webkitRelativePath?.split('/')[0] || 'Folder';
+  pendingDirectories.push({ name: dirName, files: droppedFiles, loaded: false });
   updateDirList();
   updatePrompt();
   toggleLoadPanel(true);

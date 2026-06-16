@@ -400,11 +400,12 @@ input[type="checkbox"]:checked::after {
 }
 
 input[type="range"] {
+  --rg: linear-gradient(to right, var(--accent) var(--fill-pct, 0%), var(--border) var(--fill-pct, 0%));
   -webkit-appearance: none;
   appearance: none;
   width: 160px;
   height: 8px;
-  background: linear-gradient(to right, var(--accent) var(--fill-pct, 0%), var(--border) var(--fill-pct, 0%));
+  background: var(--rg);
   cursor: pointer;
   margin: 0 8px;
   outline: none;
@@ -414,7 +415,7 @@ input[type="range"] {
 
 input[type="range"]::-webkit-slider-runnable-track {
   height: 8px;
-  background: linear-gradient(to right, var(--accent) var(--fill-pct, 0%), var(--border) var(--fill-pct, 0%));
+  background: var(--rg);
 }
 
 input[type="range"]::-webkit-slider-thumb {
