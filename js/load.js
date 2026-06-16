@@ -32,7 +32,8 @@ function updateDirList() {
     }
     dirList.appendChild(el);
   });
-  if (loadBtn) loadBtn.disabled = !(hasUnloaded || hasPendingRemoval);
+  const hasNeedsReload = pendingDirectories.some(d => d._needsReload);
+  if (loadBtn) loadBtn.disabled = !(hasUnloaded || hasPendingRemoval || hasNeedsReload);
 }
 
 fileInput.addEventListener('change', (e) => {
@@ -46,19 +47,28 @@ fileInput.addEventListener('change', (e) => {
   updatePrompt();
 });
 
+function removeDirFiles(d) {
+  const removeSet = new Set(d.files);
+  allFiles = allFiles.filter(f => !removeSet.has(f));
+  baseOrder = baseOrder.filter(f => !removeSet.has(f));
+}
+
 ignoreSubdirsCheckbox.addEventListener('change', () => {
   for (const d of pendingDirectories) {
-    if (d.loaded) {
-      const removeSet = new Set(d.files);
-      allFiles = allFiles.filter(f => !removeSet.has(f));
-      baseOrder = baseOrder.filter(f => !removeSet.has(f));
-      d.loaded = false;
-    }
+    if (d.loaded && !d._pendingRemove) d._needsReload = true;
   }
   updateDirList();
 });
 
 loadBtn.addEventListener('click', () => {
+  for (const d of pendingDirectories) {
+    if (d._needsReload && d.loaded && !d._pendingRemove) {
+      removeDirFiles(d);
+      d.loaded = false;
+    }
+    delete d._needsReload;
+  }
+
   const toRemove = pendingDirectories.filter(d => d._pendingRemove);
   const toAdd = pendingDirectories.filter(d => !d.loaded);
   if (toRemove.length === 0 && toAdd.length === 0) return;
@@ -72,9 +82,7 @@ loadBtn.addEventListener('click', () => {
   }
 
   for (const dir of toRemove) {
-    const removeSet = new Set(dir.files);
-    allFiles = allFiles.filter(f => !removeSet.has(f));
-    baseOrder = baseOrder.filter(f => !removeSet.has(f));
+    removeDirFiles(dir);
     const idx = pendingDirectories.indexOf(dir);
     if (idx !== -1) pendingDirectories.splice(idx, 1);
   }
