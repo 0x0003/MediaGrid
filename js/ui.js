@@ -135,33 +135,31 @@ function toggleColumnLock(colIndex) {
 }
 
 /* Column blur / pixelation */
+function renderPixelated(img, canvas, w, h, blockDivisor) {
+  const block = Math.max(8, Math.floor(Math.min(w, h) / blockDivisor));
+  const sw = Math.ceil(w / block), sh = Math.ceil(h / block);
+  const temp = document.createElement('canvas');
+  temp.width = sw; temp.height = sh;
+  temp.getContext('2d').drawImage(img, 0, 0, sw, sh);
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(temp, 0, 0, sw, sh, 0, 0, w, h);
+  ctx.imageSmoothingEnabled = true;
+}
+
 function pixelateImage(it) {
   const wrap = it.el;
   if (!wrap || wrap._pixelCanvas) return;
   const img = wrap._img;
   if (!img || !img.complete || !img.naturalWidth) return;
-
   const w = wrap.clientWidth;
   const h = wrap.clientHeight;
   if (w === 0 || h === 0) return;
-
   const canvas = document.createElement('canvas');
   canvas.className = 'media loaded';
   canvas.width = w;
   canvas.height = h;
-
-  const block = Math.max(8, Math.floor(Math.min(w, h) / 55));
-  const sw = Math.ceil(w / block), sh = Math.ceil(h / block);
-
-  const temp = document.createElement('canvas');
-  temp.width = sw; temp.height = sh;
-  temp.getContext('2d').drawImage(img, 0, 0, sw, sh);
-
-  const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(temp, 0, 0, sw, sh, 0, 0, w, h);
-  ctx.imageSmoothingEnabled = true;
-
+  renderPixelated(img, canvas, w, h, 55);
   img.style.display = 'none';
   wrap.appendChild(canvas);
   wrap._pixelCanvas = canvas;
@@ -186,15 +184,7 @@ function resizePixelCanvas(it) {
   canvas.height = h;
   const img = wrap._img;
   if (!img) return;
-  const block = Math.max(8, Math.floor(Math.min(w, h) / 12));
-  const sw = Math.ceil(w / block), sh = Math.ceil(h / block);
-  const temp = document.createElement('canvas');
-  temp.width = sw; temp.height = sh;
-  temp.getContext('2d').drawImage(img, 0, 0, sw, sh);
-  const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(temp, 0, 0, sw, sh, 0, 0, w, h);
-  ctx.imageSmoothingEnabled = true;
+  renderPixelated(img, canvas, w, h, 12);
 }
 
 function applyColumnBlur() {
