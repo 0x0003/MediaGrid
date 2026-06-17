@@ -576,8 +576,9 @@ input[type="range"]::-moz-range-thumb {
 
 .overlay-zoom {
   background: transparent;
-  z-index: 9000;
+  z-index: 11000;
   cursor: zoom-out;
+  overflow: hidden;
 }
 
 .overlay-drop {
@@ -617,6 +618,7 @@ input[type="range"]::-moz-range-thumb {
   height: auto;
   object-fit: contain;
   display: block;
+  transform-origin: center center;
 }
 
 .info-popup {

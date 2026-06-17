@@ -79,6 +79,11 @@ onHotkey('Ctrl+LMB', 'Pixelate column',
 onHotkey('Ctrl+1-9', 'Pixelate column',
   document, 'keydown', e => {
     if (e.target.tagName.match(/^(input|textarea|select)$/i)) return;
+    if (zoomedMedia) {
+      e.preventDefault();
+      _zoomExitHandler();
+      return;
+    }
     if (e.ctrlKey && e.code.startsWith('Digit') && Number(e.code.slice(5)) >= 1 && Number(e.code.slice(5)) <= 9) {
       e.preventDefault();
       toggleColumnBlur(Number(e.code.slice(5)) - 1);

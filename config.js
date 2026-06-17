@@ -17,13 +17,16 @@ const CONFIG = {
 
   // Volume
   volume: 0.1,
-  volumeStep: 0.01,
+  volumeStep: 0.05,
 
   // Theme: 'system' | 'light' | 'dark'
   theme: 'system',
 
   // Filter files from subdirectories
   ignoreSubdirs: true,
+
+  // Zoom wheel step (fraction of zoom level per tick)
+  zoomStep: 0.3,
 
   // Regex filter (empty = *)
   regexFilter: '',

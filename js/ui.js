@@ -133,6 +133,7 @@ volumeInput.addEventListener('input', e => {
   for (const it of items) {
     if (it.el && it.el._video) it.el._video.volume = volumeLevel;
   }
+  if (_zoomClone && _zoomClone.tagName === 'VIDEO') _zoomClone.volume = volumeLevel;
 });
 
 /* Touch / Wheel */
@@ -246,9 +247,141 @@ function toggleColumnBlur(colIndex) {
 /* Zoom */
 let zoomedMedia = null;
 let _zoomExitHandler = null;
+let _zoomLevel = 1;
+let _panX = 0;
+let _panY = 0;
+let _zoomClone = null;
+let _zoomIsImage = false;
+
+function _applyZoom() {
+  if (!_zoomClone) return;
+  _zoomClone.style.transform = `translate(${_panX}px, ${_panY}px) scale(${_zoomLevel})`;
+}
+function zoomPan(dx, dy) {
+  _panX += dx; _panY += dy;
+  _applyZoom();
+}
+
 const zoomOverlay = document.createElement('div');
 zoomOverlay.className = 'overlay overlay-zoom glass';
 document.body.appendChild(zoomOverlay);
+
+zoomOverlay.addEventListener('wheel', e => {
+  if (!zoomedMedia) return;
+  e.preventDefault();
+  if (_zoomIsImage) {
+    const old = _zoomLevel;
+    _zoomLevel = Math.max(1, Math.min(10, _zoomLevel + (e.deltaY > 0 ? -CONFIG.zoomStep : CONFIG.zoomStep)));
+    const rect = zoomOverlay.getBoundingClientRect();
+    const cx = e.clientX - rect.left - rect.width / 2;
+    const cy = e.clientY - rect.top - rect.height / 2;
+    _panX = cx - (cx - _panX) * (_zoomLevel / old);
+    _panY = cy - (cy - _panY) * (_zoomLevel / old);
+    _applyZoom();
+  } else {
+    const step = +volumeInput.step;
+    volumeInput.value = Math.max(0, Math.min(1, +volumeInput.value + (e.deltaY > 0 ? -step : step)));
+    volumeInput.dispatchEvent(new Event('input'));
+  }
+}, { passive: false });
+
+zoomOverlay.addEventListener('mousedown', e => {
+  if (!zoomedMedia) return;
+  if (e.button !== 0 && e.button !== 1) return;
+  if (e.button === 1 && !_zoomIsImage) return;
+
+  // Background click → exit on mouseup
+  if (e.target === zoomOverlay) {
+    e.preventDefault();
+    function onUp() {
+      document.removeEventListener('mouseup', onUp);
+      _zoomExitHandler && _zoomExitHandler();
+    }
+    document.addEventListener('mouseup', onUp);
+    return;
+  }
+
+  // Image drag/click
+  if (_zoomIsImage) {
+    e.preventDefault();
+    _zoomClone.style.cursor = 'grabbing';
+    const sx = e.clientX, sy = e.clientY;
+    const spx = _panX, spy = _panY;
+    let dragged = false;
+    function onMove(e) {
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (dx * dx + dy * dy > 25) dragged = true;
+      _panX = spx + dx;
+      _panY = spy + dy;
+      _applyZoom();
+    }
+    function onUp() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      _zoomClone.style.cursor = 'grab';
+      if (!dragged) _zoomExitHandler && _zoomExitHandler();
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (!zoomedMedia) return;
+  if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); _zoomExitHandler(); return; }
+  if (e.ctrlKey || e.altKey || e.metaKey) { e.stopImmediatePropagation(); return; }
+  let handled = false;
+  if (_zoomIsImage) {
+    handled = true;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (e.shiftKey) {
+      const dir = { 'w': 1, 'ArrowUp': 1, 'k': 1, 's': -1, 'ArrowDown': -1, 'j': -1 }[e.key.toLowerCase()];
+      if (dir) { _zoomLevel = Math.max(1, Math.min(10, _zoomLevel + dir * CONFIG.zoomStep)); _applyZoom(); }
+    } else {
+      const step = 80 / _zoomLevel;
+      switch (e.key) {
+        case 'w': case 'ArrowUp':    zoomPan(0, step);   break;
+        case 's': case 'ArrowDown':  zoomPan(0, -step);  break;
+        case 'a': case 'ArrowLeft':  zoomPan(step, 0);   break;
+        case 'd': case 'ArrowRight': zoomPan(-step, 0);  break;
+        case 'h': zoomPan(step, 0);  break;
+        case 'l': zoomPan(-step, 0); break;
+        case 'k': zoomPan(0, step);  break;
+        case 'j': zoomPan(0, -step); break;
+        default: _zoomExitHandler();
+      }
+    }
+  } else {
+    if (e.shiftKey) { e.stopImmediatePropagation(); return; }
+    const step = +volumeInput.step;
+    switch (e.key) {
+      case ' ':
+        handled = true;
+        if (_zoomClone.paused) _zoomClone.play(); else _zoomClone.pause();
+        break;
+      case 'a': case 'h': case 'ArrowLeft':
+        handled = true;
+        _zoomClone.currentTime = Math.max(0, _zoomClone.currentTime - 5);
+        break;
+      case 'd': case 'l': case 'ArrowRight':
+        handled = true;
+        _zoomClone.currentTime = Math.min(_zoomClone.duration || Infinity, _zoomClone.currentTime + 5);
+        break;
+      case 'w': case 'k': case 'ArrowUp':
+        handled = true;
+        volumeInput.value = Math.min(1, +volumeInput.value + step);
+        volumeInput.dispatchEvent(new Event('input'));
+        break;
+      case 's': case 'j': case 'ArrowDown':
+        handled = true;
+        volumeInput.value = Math.max(0, +volumeInput.value - step);
+        volumeInput.dispatchEvent(new Event('input'));
+        break;
+    }
+    if (handled) { e.preventDefault(); e.stopImmediatePropagation(); }
+  }
+});
 
 function pauseAllGridVideos() {
   for (const v of container.querySelectorAll('video')) {
@@ -302,11 +435,37 @@ function enterZoom(it) {
 
   clone.className = 'zoom-clone';
 
+  _zoomClone = clone;
+  _zoomLevel = 1;
+  _panX = 0;
+  _panY = 0;
+  _zoomIsImage = it.file.type.startsWith('image/');
+  clone.style.cursor = _zoomIsImage ? 'grab' : 'default';
+  _applyZoom();
+
   zoomOverlay.appendChild(clone);
   zoomedMedia = it;
 
   if (clone.tagName === 'VIDEO') {
     playWithMutedFallback(clone);
+    let playStateOnMousedown;
+    clone.addEventListener('mousedown', () => { playStateOnMousedown = clone.paused; }, { passive: true });
+    clone.addEventListener('click', e => {
+      e.stopPropagation();
+      setTimeout(() => {
+        if (clone.paused === playStateOnMousedown) {
+          clone.paused ? clone.play() : clone.pause();
+        }
+      }, 0);
+    });
+    clone.addEventListener('volumechange', () => {
+      volumeInput.value = clone.volume;
+      volumeLevel = clone.volume;
+      updateSliderFill(volumeInput);
+      for (const it of items) {
+        if (it.el && it.el._video) it.el._video.volume = volumeLevel;
+      }
+    });
   }
 
   function exitHandler() {
@@ -314,6 +473,7 @@ function enterZoom(it) {
       try { originalEl.currentTime = clone.currentTime; } catch (e) { }
     }
     try { clone.remove(); } catch (e) { }
+    _zoomClone = null;
     if (_wasAutoScrolling) { startAuto(); updateToggleText(); }
     zoomOverlay.style.display = 'none';
     zoomedMedia = null;
@@ -323,7 +483,6 @@ function enterZoom(it) {
   }
 
   _zoomExitHandler = exitHandler;
-  zoomOverlay.addEventListener('click', exitHandler, { once: true });
 }
 
 /* File info popup */
