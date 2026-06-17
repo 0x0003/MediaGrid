@@ -300,7 +300,11 @@ function enterZoom(it) {
   const clone = _createZoomClone(it, url, originalEl);
   if (!clone) { _zoomExit(null, null); return; }
 
+  _zoomLevel = 1;
+  _panX = 0;
+  _panY = 0;
   _activateZoomClone(clone, it);
+  _applyZoom();
   _zoomExitHandler = () => _zoomExit(clone, originalEl);
   _showZoomControls();
 }
