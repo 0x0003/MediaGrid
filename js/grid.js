@@ -21,6 +21,7 @@ let autoTicker = null;
 let volumeLevel = parseFloat(volumeInput.value) || 0.1;
 const blurredColumns = new Set();
 const lockedColumns = new Map();
+let gridZoomActive = false;
 
 function playWithMutedFallback(el) {
   el.play().catch(() => {
@@ -170,7 +171,7 @@ function mountMediaInto(wrap, it, idxInCol) {
     const vid = document.createElement('video');
     vid.className = 'media';
     vid.loop = true;
-    vid.autoplay = true;
+    vid.autoplay = !gridZoomActive;
     vid.muted = false;
     vid.playsInline = true;
     vid.volume = volumeLevel;
@@ -184,7 +185,7 @@ function mountMediaInto(wrap, it, idxInCol) {
         wrap.style.height = realH + 'px';
         adjustColumnAfter(it.col, idxInCol, delta);
       }
-      playObserver.observe(vid);
+      if (!gridZoomActive) playObserver.observe(vid);
     }, { once: true });
     vid.addEventListener('error', function onerr() {
       vid.classList.remove('loaded');

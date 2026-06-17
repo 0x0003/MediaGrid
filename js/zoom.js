@@ -1,5 +1,3 @@
-/* Zoom - zoomed media view */
-
 let zoomedMedia = null;
 let _zoomExitHandler = null;
 let _zoomLevel = 1;
@@ -37,6 +35,7 @@ function _zoomExit(clone, originalEl) {
   try { viewport.focus({ preventScroll: true }); } catch (e) { }
   clearTimeout(_zcTimer);
   zoomControls.classList.remove('visible');
+  gridZoomActive = false;
   _zoomExitHandler = null;
 }
 function _setupVideoClone(clone, originalEl) {
@@ -139,7 +138,7 @@ zoomOverlay.addEventListener('mousedown', e => {
   if (e.button !== 0 && e.button !== 1) return;
   if (e.button === 1 && !_zoomIsImage) return;
 
-  // Background click → exit on mouseup
+  // Background click - exit on mouseup
   if (e.target === zoomOverlay) {
     e.preventDefault();
     function onUp() {
@@ -281,6 +280,7 @@ function resumeAllGridVideos() {
 function enterZoom(it) {
   if (!it) return;
 
+  gridZoomActive = true;
   container.querySelectorAll('video').forEach(v => {
     v.dataset.wasPlaying = !v.paused ? 'true' : 'false';
     playObserver.unobserve(v);
@@ -333,17 +333,6 @@ function _traverseZoom(delta) {
     container.appendChild(wrap);
     newItem.el = wrap;
     mountMediaInto(wrap, newItem, idxInCol);
-
-    // Silence newly materialized video during zoom
-    const nv = wrap.querySelector('video');
-    if (nv) {
-      playObserver.unobserve(nv);
-      nv.pause();
-      nv.addEventListener('loadedmetadata', function gm() {
-        if (zoomedMedia) { playObserver.unobserve(nv); nv.pause(); }
-        nv.removeEventListener('loadedmetadata', gm);
-      }, { once: true });
-    }
   }
 
   // Only scroll if the visible fraction is below obsThreshold
@@ -375,3 +364,4 @@ function _traverseZoom(delta) {
   _zoomExitHandler = () => _zoomExit(clone, originalEl);
   _showZoomControls();
 }
+
