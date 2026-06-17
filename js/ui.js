@@ -124,7 +124,7 @@ function toggleColumnLock(colIndex) {
 
 /* Column blur / pixelation */
 function renderPixelated(img, canvas, w, h, blockDivisor) {
-  const block = Math.max(8, Math.floor(Math.min(w, h) / blockDivisor));
+  const block = Math.max(1, Math.floor(Math.min(w, h) / blockDivisor));
   const sw = Math.ceil(w / block), sh = Math.ceil(h / block);
   const temp = document.createElement('canvas');
   temp.width = sw; temp.height = sh;
@@ -147,7 +147,7 @@ function pixelateImage(it) {
   canvas.className = 'media loaded';
   canvas.width = w;
   canvas.height = h;
-  renderPixelated(img, canvas, w, h, 55);
+  renderPixelated(img, canvas, w, h, CONFIG.pixelDetail);
   img.style.display = 'none';
   wrap.appendChild(canvas);
   wrap._pixelCanvas = canvas;
@@ -172,7 +172,7 @@ function resizePixelCanvas(it) {
   canvas.height = h;
   const img = wrap._img;
   if (!img) return;
-  renderPixelated(img, canvas, w, h, 12);
+  renderPixelated(img, canvas, w, h, CONFIG.pixelDetail);
 }
 
 function applyColumnBlur() {

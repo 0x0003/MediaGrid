@@ -48,5 +48,8 @@ const CONFIG = {
   obsThreshold: 0.45,
 
   // Scroll easing factor
-  ease: 0.12
+  ease: 0.12,
+
+  // Higher = more detail retained when pixelating columns
+  pixelDetail: 10,
 };
