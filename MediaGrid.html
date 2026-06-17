@@ -60,6 +60,9 @@
     <symbol id="arrow-right" viewBox="0 0 24 24" fill="currentColor" stroke="none">
       <polygon points="8,4 20,12 8,20"/>
     </symbol>
+    <symbol id="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M7 7l10 10M17 7l-10 10"/>
+    </symbol>
   </svg>
 
   <div id="top-trigger" aria-hidden="true"></div>
@@ -79,7 +82,7 @@
   </div>
 
   <div id="panel" class="glass">
-    <div id="panelCloseWrap"><button id="panelClose" type="button">&times;</button></div>
+    <div id="panelCloseWrap"><button id="panelClose" type="button"><svg viewBox="0 0 24 24" width="100%" height="100%"><use href="#close"/></svg></button></div>
     <div id="panelButtons">
       <input id="file" type="file" webkitdirectory multiple accept="image/*,video/*" />
       <button type="button" id="fileButton">Select directories...</button>
