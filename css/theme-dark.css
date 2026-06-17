@@ -1,0 +1,14 @@
+:root {
+  --bg: #121212;
+  --text: #e8e3e3;
+  --muted: #8e8e8e;
+  --accent: #7fb4ca;
+  --accent-alt: #4a7ba5;
+  --ph-1: #1e2024;
+  --ph-2: #2a2d33;
+  --placeholder-text: rgba(255, 255, 255, 0.06);
+  --media-bg: #000000;
+  --overlay-bg: rgba(18, 18, 18, 0.8);
+  --glass-input: rgba(0, 0, 0, 0.15);
+  --dirlist-bg: rgba(0, 0, 0, 0.35);
+}
