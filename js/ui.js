@@ -273,11 +273,14 @@ function enterZoom(it) {
   });
   pauseAllGridVideos();
 
+  const _wasAutoScrolling = !!autoTicker;
+  if (_wasAutoScrolling) { stopAuto(); updateToggleText(); }
+
   zoomOverlay.innerHTML = '';
   zoomOverlay.style.display = 'flex';
 
   const originalEl = it.el?.querySelector('.media');
-  if (!originalEl) { zoomOverlay.style.display = 'none'; resumeAllGridVideos(); return; }
+  if (!originalEl) { zoomOverlay.style.display = 'none'; if (_wasAutoScrolling) { startAuto(); updateToggleText(); } resumeAllGridVideos(); return; }
 
   let clone;
   const url = createObjectURLFor(it);
@@ -294,7 +297,7 @@ function enterZoom(it) {
     clone.controls = true;
     clone.currentTime = originalEl.currentTime || 0;
   } else {
-    zoomOverlay.style.display = 'none'; resumeAllGridVideos(); return;
+    zoomOverlay.style.display = 'none'; if (_wasAutoScrolling) { startAuto(); updateToggleText(); } resumeAllGridVideos(); return;
   }
 
   clone.className = 'zoom-clone';
@@ -311,6 +314,7 @@ function enterZoom(it) {
       try { originalEl.currentTime = clone.currentTime; } catch (e) { }
     }
     try { clone.remove(); } catch (e) { }
+    if (_wasAutoScrolling) { startAuto(); updateToggleText(); }
     zoomOverlay.style.display = 'none';
     zoomedMedia = null;
     resumeAllGridVideos();
