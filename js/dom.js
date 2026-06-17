@@ -24,6 +24,9 @@ const dropOverlay = document.getElementById('dropOverlay');
 const topBar = document.getElementById('top-left');
 const topRight = document.getElementById('top-right');
 const panelClose = document.getElementById('panelClose');
+const zoomOverlay = document.querySelector('.overlay-zoom');
+const zoomControls = document.getElementById('zoomControls');
+const flashIndicator = document.getElementById('flashIndicator');
 
 /* Apply config to DOM elements */
 if (CONFIG.columns != null) columnsSelect.value = String(CONFIG.columns);

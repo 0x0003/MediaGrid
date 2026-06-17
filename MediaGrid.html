@@ -47,6 +47,18 @@
       <path d="M1 4v6h6"/>
       <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
     </symbol>
+    <symbol id="arrow-up" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="4,16 12,4 20,16"/>
+    </symbol>
+    <symbol id="arrow-left" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="16,4 4,12 16,20"/>
+    </symbol>
+    <symbol id="arrow-down" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="4,8 12,20 20,8"/>
+    </symbol>
+    <symbol id="arrow-right" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="8,4 20,12 8,20"/>
+    </symbol>
   </svg>
 
   <div id="top-trigger" aria-hidden="true"></div>
@@ -136,11 +148,25 @@
     </div>
   </div>
 
+  <div class="overlay overlay-zoom glass"></div>
+
+  <div id="flashIndicator"></div>
+
+  <div id="zoomControls">
+    <div class="zc-grid">
+      <button class="zc-w" title="Navigate up (W)"><svg viewBox="0 0 24 24"><use href="#arrow-up"/></svg></button>
+      <button class="zc-a" title="Navigate left (A)"><svg viewBox="0 0 24 24"><use href="#arrow-left"/></svg></button>
+      <button class="zc-s" title="Navigate down (S)"><svg viewBox="0 0 24 24"><use href="#arrow-down"/></svg></button>
+      <button class="zc-d" title="Navigate right (D)"><svg viewBox="0 0 24 24"><use href="#arrow-right"/></svg></button>
+    </div>
+  </div>
+
   <script src="./config.js"></script>
   <script src="./js/dom.js"></script>
   <script src="./js/grid.js"></script>
   <script src="./js/load.js"></script>
   <script src="./js/ui.js"></script>
+  <script src="./js/zoom.js"></script>
   <script src="./js/select.js"></script>
   <script src="./js/keymap.js"></script>
 

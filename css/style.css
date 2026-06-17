@@ -709,3 +709,47 @@ input[type="range"]::-moz-range-thumb {
   height: 38px;
 }
 
+#zoomControls {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  z-index: 11001;
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+}
+#zoomControls.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.zc-grid {
+  display: grid;
+  grid-template-columns: 42px 42px 42px;
+  grid-template-rows: 42px 42px;
+  gap: 1px;
+}
+.zc-w { grid-column: 2; grid-row: 1; }
+.zc-a { grid-column: 1; grid-row: 2; }
+.zc-s { grid-column: 2; grid-row: 2; }
+.zc-d { grid-column: 3; grid-row: 2; }
+#zoomControls button {
+  background: none;
+  cursor: pointer;
+  color: var(--text-purewhite);
+  filter: var(--shadow-dual);
+  padding: 0;
+  margin: 0;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+}
+#zoomControls button:hover {
+  color: var(--accent);
+}
+#zoomControls svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
