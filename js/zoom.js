@@ -178,7 +178,19 @@ zoomOverlay.addEventListener('mousedown', e => {
 document.addEventListener('keydown', e => {
   if (!zoomedMedia) return;
   if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); _zoomExitHandler(); return; }
-  if (e.ctrlKey || e.altKey || e.metaKey) { e.stopImmediatePropagation(); return; }
+  if (e.ctrlKey) {
+    if (!_zoomIsImage) { e.stopImmediatePropagation(); return; }
+    switch (e.key) {
+      case '=': _zoomLevel = Math.max(_minZoom(), Math.min(10, _zoomLevel + CONFIG.zoomStep)); _applyZoom(); break;
+      case '-': _zoomLevel = Math.max(_minZoom(), Math.min(10, _zoomLevel - CONFIG.zoomStep)); _applyZoom(); break;
+      case '0': _zoomLevel = 1; _panX = 0; _panY = 0; _applyZoom(); break;
+      default: e.stopImmediatePropagation(); return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    return;
+  }
+  if (e.altKey || e.metaKey) { e.stopImmediatePropagation(); return; }
   let handled = false;
   if (_zoomIsImage) {
     handled = true;
