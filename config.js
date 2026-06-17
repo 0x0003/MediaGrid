@@ -10,7 +10,7 @@ const CONFIG = {
   // Shuffle on load
   shuffle: true,
 
-  // Auto-scroll speed
+  // Auto-scroll speed (1–25)
   speed: 3,
   speedMin: 1,
   speedMax: 25,
@@ -22,19 +22,19 @@ const CONFIG = {
   // Theme: 'system' | 'light' | 'dark'
   theme: 'system',
 
-  // Filter files from subdirectories
+  // Exclude files in subdirectories
   ignoreSubdirs: true,
 
-  // Zoom wheel step (fraction of zoom level per tick)
+  // Zoom increment per step
   zoomStep: 0.3,
 
-  // Regex filter (empty = *)
+  // Regex filter (empty string = *)
   regexFilter: '',
 
   // Show the files panel at startup
   loadPanelVisible: true,
 
-  // How long the file info popup will stay visible before automatically closing
+  // Popup auto-close delay (ms)
   popupFadeout: 3000,
 
   // Flash play/pause symbol in the center on toggle
@@ -44,13 +44,13 @@ const CONFIG = {
   // Number of items assigned per batch
   assignBatch: 48,
 
-  // Screens to preload ahead of viewport
+  // Grid rows to preload ahead of scroll direction
   preloadScreens: 2,
 
   // Fallback aspect ratio (width/height)
   estRatio: 0.75,
 
-  // Intersection ratio to trigger video play
+  // Visible fraction threshold to trigger video autoplay
   obsThreshold: 0.15,
 
   // Scroll easing factor
