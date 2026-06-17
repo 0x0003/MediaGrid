@@ -177,6 +177,7 @@ body:has(#container > .item) #top-right button:hover {
   color: var(--muted);
   font-size: var(--fs-sm);
   align-self: center;
+  cursor: default;
 }
 #panelCloseWrap {
   position: absolute;
@@ -402,6 +403,7 @@ body:has(#container > .item) #panelClose {
   font-size: var(--fs-xs);
   color: var(--muted);
   text-align: center;
+  cursor: default;
 }
 
 button,

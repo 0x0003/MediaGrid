@@ -40,6 +40,41 @@ menuToggle.addEventListener('click', () => togglePanel());
 panelClose.addEventListener('click', () => togglePanel(false));
 togglePanel(CONFIG.loadPanelVisible);
 
+/* Panel drag */
+let panelDrag, panelOffX, panelOffY;
+function clampPanelPos() {
+  if (!panel.classList.contains('visible')) return;
+  const r = panel.getBoundingClientRect();
+  let left = parseInt(panel.style.left, 10) || r.left;
+  let top = parseInt(panel.style.top, 10) || r.top;
+  const maxL = window.innerWidth - panel.offsetWidth;
+  const maxT = window.innerHeight - panel.offsetHeight;
+  if (maxL < 0) { left = 0; top = 0; return; }
+  left = Math.max(0, Math.min(left, maxL));
+  top = Math.max(0, Math.min(top, maxT));
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+}
+panel.addEventListener('pointerdown', e => {
+  if (e.target.closest('button, input, select, label, option, .custom-select, .cs-option, #panelCloseWrap, a') || e.target.closest('#dirList')) return;
+  const rect = panel.getBoundingClientRect();
+  panelOffX = e.clientX - rect.left;
+  panelOffY = e.clientY - rect.top;
+  panelDrag = true;
+  panel.setPointerCapture(e.pointerId);
+});
+panel.addEventListener('pointermove', e => {
+  if (!panelDrag) return;
+  let left = e.clientX - panelOffX;
+  let top = e.clientY - panelOffY;
+  left = Math.max(0, Math.min(left, window.innerWidth - panel.offsetWidth));
+  top = Math.max(0, Math.min(top, window.innerHeight - panel.offsetHeight));
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+});
+panel.addEventListener('pointerup', () => { panelDrag = false; });
+window.addEventListener('resize', clampPanelPos);
+
 /* Columns / Filter / Reshuffle */
 columnsSelect.addEventListener('change', () => {
   const n = parseInt(columnsSelect.value, 10) || 4;

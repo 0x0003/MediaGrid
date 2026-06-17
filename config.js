@@ -45,11 +45,11 @@ const CONFIG = {
   estRatio: 0.75,
 
   // Intersection ratio to trigger video play
-  obsThreshold: 0.45,
+  obsThreshold: 0.15,
 
   // Scroll easing factor
   ease: 0.12,
 
   // Higher = more detail retained when pixelating columns
-  pixelDetail: 10,
+  pixelDetail: 35,
 };
