@@ -92,6 +92,19 @@ filterSelect.addEventListener('change', () => applyFilterAndRebuild());
 reshuffleBtn.addEventListener('click', reshuffleFiles);
 
 /* Auto-scroll */
+function flashOverlay(sym) {
+  if (!CONFIG.flashIndicator) return;
+  let el = document.getElementById('flashIndicator');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'flashIndicator';
+    document.body.appendChild(el);
+  }
+  el.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><use href="#${sym}"/></svg>`;
+  el.classList.add('active');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('active'), 350);
+}
 toggleAutoBtn.addEventListener('click', () => {
   if (autoTicker) stopAuto();
   else startAuto();

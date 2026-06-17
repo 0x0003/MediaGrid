@@ -34,6 +34,9 @@ const CONFIG = {
   // How long the file info popup will stay visible before automatically closing
   popupFadeout: 3000,
 
+  // Flash play/pause symbol in the center on toggle
+  flashIndicator: true,
+
   /* Grid engine */
   // Number of items assigned per batch
   assignBatch: 48,

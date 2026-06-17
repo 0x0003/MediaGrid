@@ -94,7 +94,7 @@ onHotkey('Ctrl+1-9', 'Pixelate column',
 /* Auto-scroll */
 onHotkey('Space / p', 'Toggle auto-scroll',
   e => e.key === ' ' || e.key.toLowerCase() === 'p',
-  e => { e.preventDefault(); if (autoTicker) stopAuto(); else startAuto(); updateToggleText(); }
+  e => { e.preventDefault(); if (autoTicker) stopAuto(); else startAuto(); updateToggleText(); flashOverlay(autoTicker ? 'play' : 'pause'); }
 );
 
 onHotkey('ArrowRight / l / d', 'Increase auto-scroll speed',
