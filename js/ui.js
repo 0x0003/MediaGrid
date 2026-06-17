@@ -9,8 +9,6 @@ fileButton.addEventListener('click', () => fileInput.click());
 
 themeToggle.addEventListener('click', () => {
   document.documentElement.classList.toggle('light');
-  updateSliderFill(speedInput);
-  updateSliderFill(volumeInput);
 });
 
 /* Top bar visibility */
@@ -272,6 +270,9 @@ function highlightMedia(it, color) {
 
 let activePopups = new Map();
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
 function showInfoPopup(it, clientX, clientY) {
   if (zoomedMedia) return;
   const existing = activePopups.get(it.id);
@@ -285,10 +286,6 @@ function showInfoPopup(it, clientX, clientY) {
 
   const color = nextPopupColor();
   const borderEl = highlightMedia(it, color);
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-  }
 
   const popup = document.createElement('div');
   popup.className = 'info-popup';
