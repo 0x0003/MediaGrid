@@ -1,0 +1,41 @@
+.glass {
+  background: var(--overlay-bg);
+  backdrop-filter: blur(var(--overlay-blur));
+  -webkit-backdrop-filter: blur(var(--overlay-blur));
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-zoom {
+  background: transparent;
+  z-index: 11000;
+  cursor: zoom-out;
+  overflow: hidden;
+}
+
+.overlay-drop {
+  z-index: 20000;
+  border: 3px dashed var(--accent);
+  pointer-events: none;
+}
+.overlay-drop.visible {
+  display: flex;
+}
+#dropOverlay > div {
+  color: var(--text);
+  font-size: var(--fs-xl);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.overlay-hotkey {
+  z-index: 9999;
+}

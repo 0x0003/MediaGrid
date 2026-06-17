@@ -1,0 +1,273 @@
+#panel {
+  display: none;
+  position: fixed;
+  left: 3vw;
+  top: 8vh;
+  width: 15vw;
+  min-width: 280px;
+  max-width: 420px;
+  max-height: 95vh;
+  z-index: 250;
+  box-shadow: 0 4px 24px var(--panel-shadow);
+  padding: 20px;
+  grid-template-columns: max-content 1fr;
+  gap: 10px 16px;
+}
+#panel.visible {
+  display: grid;
+}
+
+#panelButtons,
+#panelRegex,
+#panelSubdirs,
+#dirList,
+#mediaStatus {
+  grid-column: 1 / -1;
+}
+
+#panel input[type=range] {
+  --rg: linear-gradient(to right, var(--accent) var(--fill-pct, 0%), var(--glass-input) var(--fill-pct, 0%));
+  background: var(--rg);
+  width: 100%;
+  margin: 2px 0 0 0;
+  align-self: center;
+}
+#panel input[type=range]:hover {
+  --rg: linear-gradient(to right, var(--accent-alt) var(--fill-pct, 0%), var(--dirlist-bg) var(--fill-pct, 0%));
+  background: var(--rg);
+}
+
+.pl {
+  text-align: right;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  align-self: center;
+  cursor: default;
+}
+#panelCloseWrap {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  width: 52px;
+  height: 52px;
+  z-index: 1;
+  background: none;
+}
+#panelClose {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  background: none;
+  font-size: 34px;
+  cursor: pointer;
+  color: var(--text);
+  padding: 6px;
+  line-height: 1;
+  width: 100%;
+  height: 100%;
+}
+body:has(#container > .item) #panelClose {
+  filter: var(--shadow-dual);
+  color: var(--text-purewhite);
+}
+#panel:hover #panelClose {
+  opacity: 1;
+  pointer-events: auto;
+}
+#panelCloseWrap:hover #panelClose {
+  opacity: 1;
+  pointer-events: auto;
+  color: var(--accent);
+  filter: drop-shadow(0 2px 6px var(--shadow));
+}
+#panel input[type="file"] {
+  display: none;
+}
+
+#panelButtons {
+  display: flex;
+  gap: 10px;
+}
+#panelButtons button {
+  box-sizing: border-box;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  background: transparent;
+  color: var(--text);
+  padding: 6px 12px;
+}
+#panelButtons button:not(#loadBtn:disabled):hover {
+  color: var(--accent);
+}
+#panelButtons #fileButton {
+  flex: 1;
+  background: var(--glass-input);
+}
+#panelButtons #loadBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  background: var(--glass-input);
+}
+#loadBtn:not(:disabled) {
+  background: rgba(140, 153, 125, 0.65);
+  color: var(--text-purewhite);
+}
+
+#panelRegex {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  min-width: 0;
+}
+#panel input[type="text"] {
+  background: var(--glass-input);
+}
+#panelRegex input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  color: var(--text);
+  font-size: var(--fs-sm);
+}
+#panelRegex input:hover,
+#panelRegex input:focus {
+  background: var(--dirlist-bg);
+}
+#panel input[type="checkbox"]:not(:checked) {
+  background: var(--glass-input);
+}
+#panel input[type="checkbox"]:not(:checked):hover {
+  background: var(--dirlist-bg);
+}
+#panel input[type="checkbox"]:checked:hover {
+  background: var(--accent-alt);
+}
+
+/* Custom dropdown */
+.custom-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: var(--input-height);
+  user-select: none;
+  background: var(--glass-input);
+}
+.custom-select:hover .cs-value,
+.custom-select:hover .cs-arrow {
+  color: var(--accent);
+}
+.custom-select .cs-value {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.custom-select .cs-arrow {
+  width: 10px;
+  height: 6px;
+  margin-right: 10px;
+  color: var(--text);
+  flex-shrink: 0;
+  transition: transform .2s ease;
+}
+.custom-select.open {
+  z-index: 10001;
+}
+.custom-select.open .cs-arrow {
+  transform: rotate(180deg);
+}
+.custom-select .cs-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  z-index: 10000;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(var(--overlay-blur));
+  -webkit-backdrop-filter: blur(var(--overlay-blur));
+}
+.custom-select.open .cs-options {
+  display: block;
+}
+.custom-select .cs-option {
+  padding: 8px 10px;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  cursor: pointer;
+  transition: background .1s;
+}
+.custom-select .cs-option:hover {
+  background: rgba(128, 128, 128, 0.15);
+}
+.custom-select .cs-option.selected {
+  color: var(--accent);
+}
+
+#panelSubdirs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#panelSubdirs label {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+#dirList {
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--dirlist-bg);
+  padding: 4px 0;
+}
+#dirList > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  cursor: default;
+}
+#dirList > div > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+#dirList > div.clickable:hover {
+  color: var(--accent);
+}
+#dirList > div.loaded-dir {
+  color: var(--muted);
+}
+#dirList > div.pending-load:hover {
+  opacity: 0.75;
+  color: var(--text);
+}
+#dirList > div.pending-remove {
+  color: var(--remove-color);
+}
+#dirList > div.pending-remove:hover {
+  color: var(--remove-hover);
+}
+#dirList > div > .dir-sym {
+  flex-shrink: 0;
+}
+
+#mediaStatus {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-align: center;
+  cursor: default;
+}

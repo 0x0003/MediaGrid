@@ -1,0 +1,80 @@
+#top-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5vh;
+  z-index: 260;
+  pointer-events: auto;
+}
+
+#top-left,
+#top-right {
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+}
+
+#top-left {
+  left: 0;
+  padding: 10px 14px;
+}
+
+#top-left.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#top-left button,
+#top-right button {
+  background: none;
+  cursor: pointer;
+  color: var(--text);
+  padding: 0;
+  margin: 0;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+}
+
+body:has(#container > .item) #top-left button,
+body:has(#container > .item) #top-right button {
+  color: var(--text-purewhite);
+  filter: var(--shadow-dual);
+}
+body:has(#container > .item) #top-left button:hover,
+body:has(#container > .item) #top-right button:hover {
+  color: var(--accent);
+}
+
+#top-left button:hover,
+#top-right button:hover {
+  color: var(--accent);
+}
+
+#top-left svg,
+#top-right svg {
+  display: block;
+}
+
+#top-right {
+  right: 14px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+#top-right.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#themeToggle .moon { display: block; }
+#themeToggle .sun { display: none; }
+.light #themeToggle .moon { display: none; }
+.light #themeToggle .sun { display: block; }
