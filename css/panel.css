@@ -70,6 +70,9 @@ body:has(#container > .item) #panelClose {
   filter: var(--shadow-dual);
   color: var(--text-purewhite);
 }
+body:has(#container > .item) #panelClose:hover {
+  color: var(--accent);
+}
 #panel:hover #panelClose {
   opacity: 1;
   pointer-events: auto;
