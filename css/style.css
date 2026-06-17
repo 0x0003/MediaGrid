@@ -1,6 +1,7 @@
 :root {
   --bg: #121212;
   --text: #e8e3e3;
+  --text-purewhite: #ffffff;
   --muted: #8e8e8e;
   --accent: #7fb4ca;
   --accent-alt: #4a7ba5;
@@ -11,7 +12,6 @@
   --shadow: rgba(0, 0, 0, 0.6);
   --panel-shadow: rgba(0, 0, 0, 0.5);
   --shadow-dual: drop-shadow(0 0 8px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
-  --load-btn-text: #ffffff;
   --remove-color: #ee5555;
   --remove-hover: #bb3333;
   --overlay-bg: rgba(18, 18, 18, 0.8);
@@ -99,7 +99,7 @@ body {
 
 body:has(#container > .item) #top-left button,
 body:has(#container > .item) #top-right button {
-  color: #ffffff;
+  color: var(--text-purewhite);
   filter: var(--shadow-dual);
 }
 body:has(#container > .item) #top-left button:hover,
@@ -203,6 +203,7 @@ body:has(#container > .item) #top-right button:hover {
 }
 body:has(#container > .item) #panelClose {
   filter: var(--shadow-dual);
+  color: var(--text-purewhite);
 }
 #panel:hover #panelClose {
   opacity: 1;
@@ -244,7 +245,7 @@ body:has(#container > .item) #panelClose {
 }
 #loadBtn:not(:disabled) {
   background: rgba(140, 153, 125, 0.65);
-  color: var(--load-btn-text);
+  color: var(--text-purewhite);
 }
 
 #panelRegex {
