@@ -29,13 +29,13 @@ const zoomControls = document.getElementById('zoomControls');
 const flashIndicator = document.getElementById('flashIndicator');
 
 /* Apply config to DOM elements */
-if (CONFIG.columns != null) columnsSelect.value = String(CONFIG.columns);
-if (CONFIG.filter != null) filterSelect.value = CONFIG.filter;
-if (CONFIG.shuffle != null) shuffleToggle.checked = CONFIG.shuffle;
-if (CONFIG.speed != null) speedInput.value = CONFIG.speed;
-if (CONFIG.speedMin != null) speedInput.min = CONFIG.speedMin;
-if (CONFIG.speedMax != null) speedInput.max = CONFIG.speedMax;
-if (CONFIG.volume != null) volumeInput.value = CONFIG.volume;
-if (CONFIG.volumeStep != null) volumeInput.step = CONFIG.volumeStep;
-if (CONFIG.ignoreSubdirs != null) ignoreSubdirsCheckbox.checked = CONFIG.ignoreSubdirs;
-if (CONFIG.regexFilter != null) regexInput.value = CONFIG.regexFilter;
+columnsSelect.value = String(CONFIG.columns);
+filterSelect.value = CONFIG.filter;
+shuffleToggle.checked = CONFIG.shuffle;
+speedInput.value = CONFIG.speed;
+speedInput.min = CONFIG.speedMin;
+speedInput.max = CONFIG.speedMax;
+volumeInput.value = CONFIG.volume;
+volumeInput.step = CONFIG.volumeStep;
+ignoreSubdirsCheckbox.checked = CONFIG.ignoreSubdirs;
+regexInput.value = CONFIG.regexFilter;
