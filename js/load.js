@@ -33,12 +33,12 @@ function updateDirList() {
     sym.className = 'dir-sym';
     if (d.loaded && d._pendingRemove) {
       el.classList.add('pending-remove');
-      sym.textContent = '\u2717';
+      sym.textContent = '\u25CE';
       el.title = 'Click to undo';
       el.addEventListener('click', () => { delete d._pendingRemove; updateDirList(); });
     } else if (d.loaded) {
       el.classList.add('loaded-dir', 'clickable');
-      sym.textContent = '\u2713';
+      sym.textContent = '\u25C9';
       el.title = 'Click to remove';
       el.addEventListener('click', () => { d._pendingRemove = true; updateDirList(); });
     } else {

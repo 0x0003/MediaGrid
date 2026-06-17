@@ -21,7 +21,7 @@ const dirList = document.getElementById('dirList');
 const loadBtn = document.getElementById('loadBtn');
 const shuffleToggle = document.getElementById('shuffleToggle');
 const dropOverlay = document.getElementById('dropOverlay');
-const topBar = document.getElementById('top-bar');
+const topBar = document.getElementById('top-left');
 const topRight = document.getElementById('top-right');
 const panelClose = document.getElementById('panelClose');
 

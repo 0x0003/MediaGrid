@@ -199,7 +199,7 @@ function toggleColumnBlur(colIndex) {
 let zoomedMedia = null;
 let _zoomExitHandler = null;
 const zoomOverlay = document.createElement('div');
-zoomOverlay.className = 'overlay overlay-zoom';
+zoomOverlay.className = 'overlay overlay-zoom glass';
 document.body.appendChild(zoomOverlay);
 
 function pauseAllGridVideos() {
@@ -376,7 +376,7 @@ function showInfoPopup(it, clientX, clientY) {
 
 /* Hotkey reference popup */
 const hotkeyOverlay = document.createElement('div');
-hotkeyOverlay.className = 'overlay overlay-hotkey';
+hotkeyOverlay.className = 'overlay overlay-hotkey glass';
 document.body.appendChild(hotkeyOverlay);
 
 const hotkeyPopup = document.createElement('div');

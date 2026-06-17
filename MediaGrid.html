@@ -51,7 +51,7 @@
 
   <div id="top-trigger" aria-hidden="true"></div>
 
-  <div id="top-bar" aria-hidden="false">
+  <div id="top-left" aria-hidden="false">
     <button id="menuToggle" type="button" aria-label="Toggle panel"><svg width="30" height="30"><use href="#menu"/></svg></button>
     <button id="toggleAuto" type="button" aria-label="Toggle auto-scroll"><svg width="30" height="30"><use href="#play"/></svg></button>
     <button id="reshuffleBtn" type="button" aria-label="Reshuffle"><svg width="30" height="30"><use href="#shuffle"/></svg></button>
@@ -65,12 +65,12 @@
     <button id="hotkeyIcon" type="button" aria-label="Keyboard reference"><svg width="30" height="30"><use href="#help"/></svg></button>
   </div>
 
-  <div id="panel">
+  <div id="panel" class="glass">
     <div id="panelCloseWrap"><button id="panelClose" type="button">&times;</button></div>
     <div id="panelButtons">
       <input id="file" type="file" webkitdirectory multiple accept="image/*,video/*" />
-      <button type="button" id="fileButton" class="btn">Select directories...</button>
-      <button id="loadBtn" class="btn" disabled>Load</button>
+      <button type="button" id="fileButton">Select directories...</button>
+      <button id="loadBtn" disabled>Load</button>
     </div>
 
     <label id="panelRegex">
@@ -130,7 +130,7 @@
     <div id="container" role="list"></div>
   </div>
 
-  <div id="dropOverlay" class="overlay overlay-drop">
+  <div id="dropOverlay" class="overlay overlay-drop glass">
     <div>
       <div>Drop directories here</div>
     </div>
@@ -141,6 +141,7 @@
   <script src="./js/grid.js"></script>
   <script src="./js/load.js"></script>
   <script src="./js/ui.js"></script>
+  <script src="./js/select.js"></script>
   <script src="./js/keymap.js"></script>
 
 </body>
