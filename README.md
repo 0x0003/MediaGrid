@@ -2,7 +2,7 @@
 
 A zero-dependency, client-side media viewer for browsing images and videos from local directories, arranged in an infinite scrollable grid.
 
-![screenshot](https://github.com/user-attachments/assets/1bec8416-b67b-45ac-8636-41bb3cdfbb3f)
+![screenshot](https://github.com/user-attachments/assets/3211d0f8-cebf-486f-8deb-fed773469e60)
 
 ## Usage
 
