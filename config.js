@@ -28,7 +28,7 @@ const CONFIG = {
   // Zoom increment per step
   zoomStep: 0.3,
 
-  // Regex filter (empty string = *)
+  // Regex filter (empty string = .*)
   regexFilter: '',
 
   // Show the files panel at startup
