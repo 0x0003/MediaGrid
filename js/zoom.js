@@ -366,6 +366,5 @@ function _traverseZoom(delta) {
 
   _activateZoomClone(clone, newItem);
   _zoomExitHandler = () => _zoomExit(clone, originalEl);
-  _showZoomControls();
 }
 
