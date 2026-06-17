@@ -4,7 +4,7 @@ function onHotkey(keys, desc, ...rest) {
   if (keys) hotkeys.push({ keys, desc });
   if (rest.length === 2) {
     _hotkeyHandlers.push({ match: rest[0], handle: rest[1] });
-  } else if (rest.length === 3) {
+  } else {
     rest[0].addEventListener(rest[1], rest[2]);
   }
 }
@@ -36,6 +36,12 @@ onHotkey('Shift+1-9', 'Toggle column scroll lock',
   e => e.code.startsWith('Digit') && e.shiftKey,
   e => { e.preventDefault(); const n = Number(e.code.slice(5)); if (n >= 1 && n <= 9) toggleColumnLock(n - 1); }
 );
+
+function setColumnsHotkey(n) {
+  if (n < 1 || n > 9) return;
+  columnsSelect.value = String(n);
+  columnsSelect.dispatchEvent(new Event('change'));
+}
 
 onHotkey('1-9', 'Set number of columns',
   e => e.code.startsWith('Digit'),
@@ -69,6 +75,21 @@ onHotkey('Ctrl+LMB', 'Pixelate column',
     toggleColumnBlur(col);
     e.preventDefault();
   });
+
+onHotkey('Ctrl+1-9', 'Pixelate column',
+  document, 'keydown', e => {
+    if (e.target.tagName.match(/^(input|textarea|select)$/i)) return;
+    if (e.ctrlKey && e.code.startsWith('Digit') && Number(e.code.slice(5)) >= 1 && Number(e.code.slice(5)) <= 9) {
+      e.preventDefault();
+      toggleColumnBlur(Number(e.code.slice(5)) - 1);
+      return;
+    }
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    for (const h of _hotkeyHandlers) {
+      if (h.match(e)) { h.handle(e); return; }
+    }
+  }
+);
 
 /* Auto-scroll */
 onHotkey('Space / p', 'Toggle auto-scroll',
@@ -124,20 +145,6 @@ onHotkey('Enter / r', 'Reshuffle files',
   e => { e.preventDefault(); reshuffleFiles(); }
 );
 
-document.addEventListener('keydown', (e) => {
-  if (e.target.tagName.match(/^(input|textarea|select)$/i)) return;
-  if (e.ctrlKey && e.code.startsWith('Digit')) {
-    e.preventDefault();
-    const n = Number(e.code.slice(5));
-    if (n >= 1 && n <= 9) toggleColumnBlur(n - 1);
-    return;
-  }
-  if (e.altKey || e.ctrlKey || e.metaKey) return;
-  for (const h of _hotkeyHandlers) {
-    if (h.match(e)) { h.handle(e); return; }
-  }
-});
-
 onHotkey('LMB', 'Show file info popup and copy name to clipboard',
   container, 'click',
   (e) => {
@@ -167,8 +174,3 @@ onHotkey('Double-LMB', 'Zoom in on the media element',
     enterZoom(it);
   });
 
-function setColumnsHotkey(n) {
-  if (n < 1 || n > 9) return;
-  columnsSelect.value = String(n);
-  columnsSelect.dispatchEvent(new Event('change'));
-}
