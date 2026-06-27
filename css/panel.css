@@ -134,6 +134,14 @@ body:has(#container > .item) #panelClose:hover {
   padding: 4px 8px;
   color: var(--text);
   font-size: var(--fs-sm);
+  border: 2px solid transparent;
+}
+#panelRegex input.regex-error {
+  color: var(--remove-color);
+  border-color: var(--remove-hover);
+}
+#panelRegex input.regex-error:hover {
+  color: var(--remove-hover);
 }
 #panelRegex input:hover,
 #panelRegex input:focus {

@@ -134,6 +134,11 @@ regexInput.addEventListener('keydown', (e) => {
     applyFilterAndRebuild();
   }
 });
+regexInput.addEventListener('input', () => {
+  const val = regexInput.value.trim();
+  if (!val) { regexInput.classList.remove('regex-error'); return; }
+  try { new RegExp(val, 'i'); regexInput.classList.remove('regex-error'); } catch { regexInput.classList.add('regex-error'); }
+});
 
 function updateMediaStatus() {
   if (!filesFiltered || filesFiltered.length === 0) {
@@ -258,6 +263,7 @@ function applyFilterAndRebuild() {
   if (regexValue) {
     try { regex = new RegExp(regexValue, 'i'); } catch (err) { console.warn('Invalid regex:', err); regex = null; }
   }
+  regexInput.classList.toggle('regex-error', regexValue !== '' && regex === null);
   filesFiltered = allFiles.filter(f => {
     if (mode === 'images' && !f.type.startsWith('image/')) return false;
     if (mode === 'videos' && !f.type.startsWith('video/')) return false;
