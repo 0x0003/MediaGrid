@@ -149,6 +149,7 @@ function mountMediaInto(wrap, it, idxInCol) {
   if (it.file.type.startsWith('image/')) {
     const img = document.createElement('img');
     img.className = 'media';
+    img.draggable = false;
     img.loading = 'eager';
     img.decoding = 'async';
     img.src = url;

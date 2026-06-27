@@ -128,12 +128,52 @@ volumeInput.addEventListener('input', e => {
   if (_zoomClone && _zoomClone.tagName === 'VIDEO') _zoomClone.volume = volumeLevel;
 });
 
-/* Touch / Wheel */
+/* Touch / Wheel / Mouse drag */
 let touchY = null;
 viewport.addEventListener('touchstart', e => { if (e.touches.length === 1) touchY = e.touches[0].clientY; }, { passive: true });
 viewport.addEventListener('touchmove', e => { if (touchY === null) return; const y = e.touches[0].clientY; targetY += (touchY - y); touchY = y; clampTarget(); }, { passive: false });
 viewport.addEventListener('touchend', () => touchY = null);
 viewport.addEventListener('wheel', e => { e.preventDefault(); targetY += e.deltaY; clampTarget(); }, { passive: false });
+
+let mouseY = null;
+let mouseDownY = null;
+let mouseDragActive = false;
+
+viewport.addEventListener('mousedown', e => {
+  if (e.button !== 0 || e.ctrlKey || e.metaKey) return;
+  mouseDownY = e.clientY;
+  mouseY = e.clientY;
+  mouseDragActive = false;
+});
+
+document.addEventListener('mousemove', e => {
+  if (mouseDownY === null) return;
+  if (!mouseDragActive && Math.abs(e.clientY - mouseDownY) > 3) {
+    mouseDragActive = true;
+    document.body.style.userSelect = 'none';
+  }
+  if (!mouseDragActive) return;
+  const y = e.clientY;
+  targetY += (mouseY - y);
+  mouseY = y;
+  clampTarget();
+  e.preventDefault();
+});
+
+document.addEventListener('mouseup', () => {
+  if (mouseDownY === null) return;
+  mouseDownY = null;
+  mouseY = null;
+  if (mouseDragActive) {
+    mouseDragActive = false;
+    document.body.style.userSelect = '';
+    /* Intercept the subsequent click event before it reaches the container */
+    document.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, { capture: true, once: true });
+  }
+});
 
 /* Column lock */
 function toggleColumnLock(colIndex) {
