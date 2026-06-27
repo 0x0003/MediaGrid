@@ -105,8 +105,6 @@ loadBtn.addEventListener('click', () => {
     if (idx !== -1) pendingDirectories.splice(idx, 1);
   }
 
-  const regexValue = regexInput.value.trim() || null;
-  const re = regexValue ? new RegExp(regexValue, 'i') : null;
   const ignoreSubdirs = ignoreSubdirsCheckbox.checked;
 
   for (const dir of toAdd) {
@@ -115,7 +113,6 @@ loadBtn.addEventListener('click', () => {
       const rel = fileRelPath(f);
       const depth = rel.split('/').filter(Boolean).length;
       if (ignoreSubdirs && depth > 2) continue;
-      if (re && !re.test(f.name)) continue;
       allFiles.push(f);
       baseOrder.push(f);
     }
